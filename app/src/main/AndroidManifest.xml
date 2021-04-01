@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="distinct.digitalsolutions.prabudhh">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/main_app_logo"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/main_app_logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".Activities.SuccessFailedPaymentStatusScreen" />
+        <activity android:name=".Activities.PaymentActivity" />
+        <activity android:name=".Activities.PdfViewerActivity" />
+        <activity android:name=".Activities.NewUserDetails" />
+        <activity android:name=".Activities.ImportantDetailsActivity" />
+        <activity android:name=".Activities.SinglePostViewActivity" />
+        <activity android:name=".Activities.SingleSongActivity" />
+        <activity android:name=".Activities.PlayListSongActivity" />
+        <activity android:name=".Activities.CategoryViewActivity" />
+        <activity android:name=".Activities.PostActivity" />
+        <activity android:name=".Authentication.LoginActivity" />
+        <activity android:name=".Authentication.VerifyOtpActivity" />
+        <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service android:name=".Activities.CreateNotification" />
+
+<!--        <receiver android:name=".HelperClasses.ReadPhoneStateClass">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.PHONE_STATE" />-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
+        <meta-data
+            android:name="com.razorpay.ApiKey"
+            android:value="rzp_test_fnBQYSxUcVFFYU"/>
+
+    </application>
+
+</manifest>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activities.PaymentActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhiteShade"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/payment_header_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="3dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/back_button" />
+
+        <TextView
+            android:id="@+id/payment_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/payment"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/monthly_payment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/payment_backgound"
+        android:elevation="5dp"
+        android:padding="15dp">
+
+        <TextView
+            android:id="@+id/month_main_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/monthly"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/month_plan_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/month_main_text"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/month_plan"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/buy_month_plan_button"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_design"
+            android:text="@string/buy"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/yearly_payment_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/payment_backgound"
+        android:elevation="5dp"
+        android:padding="15dp">
+
+
+        <TextView
+            android:id="@+id/year_main_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/yearly"
+            android:textColor="@color/colorBlack"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/year_plan_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/year_main_text"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/lato_bold"
+            android:text="@string/year_plan"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/buy_year_plan_button"
+            android:layout_width="80dp"
+            android:layout_height="32dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/button_design"
+            android:text="@string/buy"
+            android:textColor="@color/colorWhite"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

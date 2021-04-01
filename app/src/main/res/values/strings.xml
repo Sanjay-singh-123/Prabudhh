@@ -1,0 +1,133 @@
+<resources>
+    <string name="app_name">Prabuddha</string>
+    <string name="app_header">Prabuddha</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="recommended">Recommended</string>
+    <string name="mostly_played">Mostly Played</string>
+
+    <string name="monthly">Month</string>
+    <string name="yearly">Year</string>
+    <string name="month_plan">RS : 49/-</string>
+    <string name="year_plan">RS : 99/-</string>
+
+    <string name="payment_success">Payment Success</string>
+    <string name="payment_failed">Payment Failed</string>
+    <string name="continues">Continue</string>
+    <string name="try_again">Try Again</string>
+
+    <string name="buy">Buy</string>
+    <string name="payment">Payment</string>
+    <string name="timer">0:00</string>
+    <string name="home">Home</string>
+    <string name="category">Category</string>
+    <string name="which_are">Stories</string>
+    <string name="next">NEXT</string>
+    <string name="save">Save</string>
+    <string name="choose_profile_picture">Choose Picture</string>
+    <string name="plus">+</string>
+    <string name="country_code">Mobile Number</string>
+    <string name="otp">Enter OTP</string>
+    <string name="user_name">User Name</string>
+    <string name="email_address">Email Address</string>
+
+    <string name="please_wait">Please Wait...</string>
+
+    <string name="category_name">Category Name</string>
+
+    <string name="skip">SKIP</string>
+
+    <string name="category_search">Search Category...</string>
+    <string name="search_songs">Search Songs...</string>
+
+    <string name="song_name">Song Name</string>
+
+    <string name="artist_name">Artist : Name</string>
+
+    <string name="about_us">About Us</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="terms_conditions">Terms and Conditions</string>
+
+    <string name="profile">Profile</string>
+    <string name="logout">LOGOUT</string>
+    <string name="settings">SETTINGS</string>
+
+    <string name="post">POST</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="title_song">Type the Song...</string>
+
+    <string name="stories_header">Write Your Own Short Story!</string>
+
+    <string name="paragraph">Lorem ipsum dolor sit amet, sea no vocent propriae nominavi. Sale augue sit te. Illud dolor facilisis duo ei, novum facilisis explicari pro et. Autem quaestio atomorum pro ei. Eirmod detraxit ad nam. Eu nec volumus abhorreant.
+
+Eum doctus malorum eligendi in, te mel ferri consulatu. Duo sanctus verterem legendos ad, nibh nostro delicatissimi his at, id ius minim diceret. Novum utinam ignota ut eam. Admodum scripserit vix et, sed nihil graece an, postea percipit interesset per te. Autem apeirian constituam ad mel. Vel id nostrum insolens, nam volumus tibique constituto id.
+
+Quod recusabo ex eum, at latine temporibus eum. Ne amet aperiam interpretaris per. Duo vitae quando accusamus in, saperet apeirian ei his. Probo appareat ea mea, ne his comprehensam mediocritatem. Cum eu diam habeo suscipit, et graeco sanctus eam. Eum ut mutat aliquip insolens, ne pro stet atomorum.
+
+Eam idque dictas dolorum no, pro natum aeterno labitur an. Duo habeo admodum no. Mel aliquam delicata recteque cu, ne qui alienum definitiones. Ne nulla equidem eum, novum soluta sed no. Putent apeirian sea ex, ad eos dolorum consequat. Elitr homero concludaturque ex nec, te has quodsi eloquentiam, et vulputate complectitur per.
+
+Id mei choro regione aperiam, ius dissentiunt theophrastus id, nec id eius doming maluisset. An fuisset laboramus per. Eum ut eruditi perfecto. Has impetus minimum propriae cu, eu vel eius explicari. At mea impetus dolorum percipitur, qui id partem deterruisset, tritani convenire eum et.</string>
+
+    <string name="terms_conditions_paragraph">
+        <b>General</b>\n\nPRABUDDHA is an internet-based digital subscription service that gives you (hereinafter “You” or the “User”) access to the PRABUDDHA audiobooks, ebooks, and other literary content in Your mobile phone, on Your tablet or other devices (the “Service”) pursuant to the Terms of Use, this Privacy Policy and any supplemental terms and Conditions which may govern Your use of a specific Subscription plan for PRABUDDHA (the “Terms”). The Service is provided by PRABUDDHA India.\n\nThis page is used to inform website visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use our Service.\n\nIf you choose to use our Service, then you agree to the collection and use of information in relation to this policy. The Personal Information that we collect is used for providing and improving the Service. We will not use or share your information with anyone except as described in this Privacy Policy.\n\nThe terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at Distinct Digital app unless otherwise defined in this Privacy Policy.\n\n\n
+
+<b>Information Collection and Use</b>\n\nFor a better experience, while using our Service, we may require you to provide us with certain personally identifiable information, including but not limited to Name, Email Address, Mobile Number ( to Notify you If your device is safe), Some device permissions like( Usage Access, media, Storage, etc.). The information that we request is will be retained by us and used as described in this privacy policy.\n\nThe app does use third-party services that may collect information used to identify you.\n\nLink to the privacy policy of third party service providers used by the app\n\n\n
+
+<b>Google Play Services</b>\n\n
+
+<b>Log Data</b>\n\n
+
+We want to inform you that whenever you use our Service, in case of an error in the app we collect data and information (through third-party products) on your phone called Log Data. This Log Data may include information such as your device Internet Protocol (Ã¢â‚¬Å“IPÃ¢â‚¬Â ) address, device name, operating system version, the configuration of the app when utilizing our Service, the time and date of your use of the Service, and other statistics.\n\n
+
+<b>Cookies</b>\n\n
+
+Cookies are files with a small amount of data that is commonly used as an anonymous unique identifier. These are sent to your browser from the website that you visit and are stored on your devices internal memory.\n\n
+
+This Service does not use these Ã¢â‚¬Å“cookiesÃ¢â‚¬Â explicitly. However, the app may use third party code and libraries that use Ã¢â‚¬Å“cookiesÃ¢â‚¬Â to collect information and to improve their services. You have the option to either accept or refuse these cookies and know when a cookie is being sent to your device. If you choose to refuse our cookies, you may not be able to use some portions of this Service.\n\n
+
+<b>Service Providers</b>\n\n
+
+We may employ third-party companies and individuals due to the following reasons:\n\n
+
+    To facilitate our Service;\n
+    To provide the Service on our behalf;\n
+    To perform Service-related services; or\n
+    To assist us in analyzing how our Service is used.\n
+
+We want to inform users of this Service that these third parties have access to their Personal Information. The reason is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the information for any other purpose.\n
+
+<b>Security</b>\n\n
+
+We value your trust in providing us your Personal Information, thus we are striving to use commercially acceptable means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage is 100% secure and reliable, and we cannot guarantee its absolute security.\n\n
+
+<b>Links to Other Sites</b>\n\n
+
+This Service may contain links to other sites. If you click on a third-party link, you will be directed to that site. Note that these external sites are not operated by us. Therefore, we strongly advise you to review the Privacy Policy of these websites. We have no control over and assume no responsibility for the content, privacy policies, or practices of any third-party sites or services.\n\n
+
+<b>Childrens Privacy</b>\n\n
+
+These Services do not address anyone under the age of 13. We do not knowingly collect personally identifiable information from children under 13. In the case we discover that a child under 13 has provided us with personal information, we immediately delete this from our servers. If you are a parent or guardian and you are aware that your child has provided us with personal information, please contact us so that we will be able to do the necessary actions.\n\n
+
+<b>Changes to This Privacy Policy</b>\n\n
+
+We may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes. We will notify you of any changes by posting the new Privacy Policy on this page. These changes are effective immediately after they are posted on this page.\n\n
+
+<b>Contact Us</b>\n\n
+
+If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us.\n\n
+</string>
+
+    <string name="about_us_paragraph">Prabudhha is one of the leading audiobook and e-book streaming services and offers listening and reading of more than 500 titles on a global scale. Our vision is to make the world Know more about Indian Culture and Ethics place with great stories to be shared and enjoyed by anyone, anywhere, and anytime.\n\n\n
+
+The Prabudhha streaming business is conducted under the brands Prabudhha. Prabudhha covers every age category and can be used to learn and explore in every aspect.\n\n\n
+
+Prabudhha operates only in 1 market around the globe and is headquartered in Mumbai, India</string>
+
+    <string name="contact_us_pragraph">Email Address : Prabuddha.audiobooks@gmail.com\n
+        Address : D-10, Sector 48-A, Seawoods, Navi Mumbai, Maharashtra 400706\n
+        Contact Number : +91-8652757982</string>
+
+</resources>

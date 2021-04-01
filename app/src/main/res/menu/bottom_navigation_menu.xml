@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_screen"
+        android:title="@string/home"
+        android:icon="@mipmap/home_icon"/>
+
+    <item
+        android:id="@+id/category_screen"
+        android:title="@string/category"
+        android:icon="@mipmap/category_icon"/>
+
+    <item
+        android:id="@+id/which_are_screen"
+        android:title="@string/which_are"
+        android:icon="@mipmap/which_are"/>
+
+</menu>

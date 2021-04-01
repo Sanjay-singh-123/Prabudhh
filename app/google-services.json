@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "673234134394",
+    "firebase_url": "https://prabuddhadev-afc7c-default-rtdb.firebaseio.com",
+    "project_id": "prabuddhadev-afc7c",
+    "storage_bucket": "prabuddhadev-afc7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673234134394:android:332065283f983d3aba62c3",
+        "android_client_info": {
+          "package_name": "com.prabuddadevandroid.appname"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "673234134394-9mpb4p432r67kahnumd7irj3kiuo5i5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbbNGh46I5X_eoOTY8SPBXI7M_Hpft1Sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673234134394-9mpb4p432r67kahnumd7irj3kiuo5i5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:673234134394:android:caa4fd4a9f013be1ba62c3",
+        "android_client_info": {
+          "package_name": "distinct.digitalsolutions.prabudhh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "673234134394-9mpb4p432r67kahnumd7irj3kiuo5i5v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbbNGh46I5X_eoOTY8SPBXI7M_Hpft1Sk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "673234134394-9mpb4p432r67kahnumd7irj3kiuo5i5v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhiteShade"
+    android:orientation="vertical"
+    tools:context="distinct.digitalsolutions.prabudhh.Activities.PostActivity">
+
+    <RelativeLayout
+        android:id="@+id/post_header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorWhiteShade"
+        android:padding="6dp">
+
+        <TextView
+            android:id="@+id/post_header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="6dp"
+            android:layout_toEndOf="@+id/settings_icon"
+            android:fontFamily="@font/lato_black"
+            android:text="@string/app_name"
+            android:textAllCaps="true"
+            android:textColor="@color/colorBlack"
+            android:textSize="18sp"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/settings_icon"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="12dp"
+            android:contentDescription="@string/app_name"
+            android:src="@mipmap/back_button" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/post_layout"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="12dp"
+            android:alpha=".6"
+            android:background="@drawable/post_background"
+            android:text="POST" />
+
+        <!--            <TextView-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_centerInParent="true"-->
+        <!--                android:fontFamily="@font/lato_bold"-->
+        <!--                android:text="@string/post"-->
+        <!--                android:textColor="@color/colorBlack"-->
+        <!--                android:textSize="14sp" />-->
+
+        <!--        </Button>-->
+
+        <EditText
+            android:id="@+id/song_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/post_layout"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:alpha=".5"
+            android:background="@drawable/post_background"
+            android:fontFamily="@font/lato_regular"
+            android:gravity="start"
+            android:hint="@string/title_song"
+            android:importantForAutofill="no"
+            android:inputType="text|textLongMessage|textMultiLine"
+            android:padding="8dp"
+            android:textCursorDrawable="@color/colorBlack"
+            tools:ignore="RtlSymmetry" />
+
+        <include
+            layout="@layout/progress_bar"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</LinearLayout>
