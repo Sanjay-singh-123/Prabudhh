@@ -18,12 +18,12 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import distinct.digitalsolutions.prabudhh.Activities.PlayListSongActivity;
-import distinct.digitalsolutions.prabudhh.SharedPreference.UserSharedPreferences;
 import distinct.digitalsolutions.prabudhh.Interfaces.PaymentAlertInterface;
 import distinct.digitalsolutions.prabudhh.Model.CategoryViewModelClass;
 import distinct.digitalsolutions.prabudhh.R;
+import distinct.digitalsolutions.prabudhh.SharedPreference.UserSharedPreferences;
 
-public class CategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<CategoryViewRecyclerViewAdapter.CategoryViewHolder> {
+public class SubCategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<SubCategoryViewRecyclerViewAdapter.CategoryViewHolder> {
 
     public List<CategoryViewModelClass> mCategoryModelClass;
     public Activity mCategoryViewActivity;
@@ -31,7 +31,7 @@ public class CategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<Catego
     private UserSharedPreferences mUserSharedPreference;
     private PaymentAlertInterface paymentAlertInterface;
 
-    public CategoryViewRecyclerViewAdapter(
+    public SubCategoryViewRecyclerViewAdapter(
             //String categoryId,
             String categoryname, Activity mCategoryViewActivity,
             List<CategoryViewModelClass> mCategoryModelClass, PaymentAlertInterface paymentAlertInterface) {
@@ -65,7 +65,7 @@ public class CategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<Catego
 
     @NonNull
     @Override
-    public CategoryViewRecyclerViewAdapter.CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SubCategoryViewRecyclerViewAdapter.CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View customerHistoryViewAdapter;
 
@@ -79,11 +79,11 @@ public class CategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<Catego
 
         }
 
-        return new CategoryViewRecyclerViewAdapter.CategoryViewHolder(customerHistoryViewAdapter);
+        return new SubCategoryViewRecyclerViewAdapter.CategoryViewHolder(customerHistoryViewAdapter);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final CategoryViewRecyclerViewAdapter.CategoryViewHolder categoryViewHolder, final int position) {
+    public void onBindViewHolder(@NonNull final SubCategoryViewRecyclerViewAdapter.CategoryViewHolder categoryViewHolder, final int position) {
 
         CategoryViewModelClass categoryViewModelClass = mCategoryModelClass.get(position);
 

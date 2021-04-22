@@ -68,9 +68,10 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
     private RecyclerView mPlayListRecyclerView;
     private PlayListRecyclerviewAdapter mPlayListRecyclerViewAdapter;
     private List<CategoryViewModelClass> mPlayListModelClass = new ArrayList<>();
-    //private List<CategoryViewModelClass> mAllSongsList = new ArrayList<>();
+    private List<CategoryViewModelClass> mAllSongsList = new ArrayList<>();
 
     private List<CategoryViewModelClass> mSortedSongsList = new ArrayList<>();
+    private List<CategoryViewModelClass> mFilteredSongsList = new ArrayList<>();
 
     private RelativeLayout mPlayListLayout;
     private int mSongPlayPauseValue;
@@ -120,80 +121,17 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
                 CreateNotification.MusicBinder mServiceBinder = (CreateNotification.MusicBinder) service;
                 createNotification = mServiceBinder.getService();
 
-//                if (myValue == 6){
-//
-//                    initExoPlayer();
-//
-//                    return;
-//                }
-
-//                try {
-//
-//                    if (createNotification.player1 != null) {
-//
-//                        if (createNotification.modelClass != null && createNotification.modelClass.getSong_id().equalsIgnoreCase(categoryViewModelClass.getSong_id())) {
-//
-//                            mPlaySongIcon.setVisibility(View.GONE);
-//                            mPauseSongIcon.setVisibility(View.VISIBLE);
-//
-//                        }
-//
-//                    }
-//
-//                } catch (Exception e) {
-//                    Log.d("Error", e.getLocalizedMessage());
-//                }
-//
-//                if (createNotification != null && createNotification.modelClass != null){
-//
-//                    if (!createNotification.modelClass.getSong_id().equalsIgnoreCase(categoryViewModelClass.getSong_id())) {
-//
-//                        createNotification.player1.release();
-//                        createNotification.player1 = null;
-//
-//                    }
-//
-//                }
-//
-//                saveSongCount(categoryViewModelClass.getSong_id());
-//
-//                createNotification.playSongMethod(mSortedSongsList, mCategoryName, categoryViewModelClass
-//                        //, mCategoryId
-//                );
-//
-//                mPlaySongSharedPreference.isSongPlaying("is_song_playing", true);
-//                mPlaySongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(categoryViewModelClass));
-//                mPlaySongSharedPreference.setAllSongsList("all_songs_details", new Gson().toJson(mSortedSongsList));
-//                mPlaySongSharedPreference.setSongPlayedValue("song_value", "1");
-
                 myValue = 1;
 
                 if (createNotification.player1 != null) {
 
-                    if (
-                        //createNotification.mCategoryID.equalsIgnoreCase(mCategoryId) &&
-                    createNotification.mSongId.equalsIgnoreCase(categoryViewModelClass.getId())) {
+                    if (createNotification.mSongId.equalsIgnoreCase(categoryViewModelClass.getId())) {
 
                         createNotification.player1.addListener(new Player.EventListener() {
                             @Override
                             public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
 
-//                                if (playbackState != Player.STATE_READY) {
-//
-//                                    createNotification.playSongMethod(mSortedSongsList, mCategoryName, categoryViewModelClass
-//                                            //, mCategoryId
-//                                    );
-//
-//                                    saveSongCount(categoryViewModelClass.getSong_id());
-//
-//                                    mPlaySongSharedPreference.isSongPlaying("is_song_playing", true);
-//                                    mPlaySongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(categoryViewModelClass));
-//                                    mPlaySongSharedPreference.setAllSongsList("all_songs_details", new Gson().toJson(mSortedSongsList));
-//                                    mPlaySongSharedPreference.setSongPlayedValue("song_value", "1");
-//
-//
-//                                }else
-                                 if (playbackState == Player.STATE_ENDED){
+                                if (playbackState == Player.STATE_ENDED) {
 
                                     createNotification.player1.setPlayWhenReady(false);
                                     createNotification.player1.release();
@@ -209,9 +147,7 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
                         createNotification.player1 = null;
 
                         saveSongCount(categoryViewModelClass.getSong_id());
-                        createNotification.playSongMethod(mSortedSongsList, mCategoryName, categoryViewModelClass
-                                //        , mCategoryId
-                        );
+                        createNotification.playSongMethod(mFilteredSongsList, mCategoryName, categoryViewModelClass);
 
 
                         mPlaySongSharedPreference.isSongPlaying("is_song_playing", true);
@@ -232,9 +168,7 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
 
 
                     saveSongCount(categoryViewModelClass.getSong_id());
-                    createNotification.playSongMethod(mSortedSongsList, mCategoryName, categoryViewModelClass
-                            //, mCategoryId
-                    );
+                    createNotification.playSongMethod(mFilteredSongsList, mCategoryName, categoryViewModelClass);
 
                 }
 
@@ -366,6 +300,7 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
             playListIntent.putExtra("category_name", mCategoryName);
             playListIntent.putExtra("song_details", new Gson().toJson(categoryViewModelClass));
             playListIntent.putExtra("all_songs", new Gson().toJson(mPlayAllSongsModelClass));
+            playListIntent.putExtra("filtered_songs",new Gson().toJson(mFilteredSongsList));
             playListIntent.putExtra("back_button", mBackButton);
             mContext.startActivity(playListIntent);
 
@@ -484,73 +419,6 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
                     }
                 });
 
-//                createNotification.player1.addListener(new ExoPlayer.EventListener() {
-//                    @Override
-//                    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//
-//                        if (playbackState == Player.STATE_ENDED) {
-//
-//                            mPauseSongIcon.setVisibility(View.GONE);
-//                            mPlaySongIcon.setVisibility(View.VISIBLE);
-//
-//                            createNotification.player1.setPlayWhenReady(false);
-//                            createNotification.player1.release();
-//                            createNotification.player1 = null;
-//
-//                        } else if (playbackState == Player.STATE_READY) {
-//
-//                            mProgressbarLayout.setVisibility(View.GONE);
-//                            mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                        } else if (playbackState == Player.STATE_BUFFERING) {
-//
-//                            mProgressbarLayout.setVisibility(View.VISIBLE);
-//                            mContext.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                        } else {
-//
-//                            mProgressbarLayout.setVisibility(View.GONE);
-//                            mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                        }
-//                    }
-//                });
-
-//                createNotification.player1.addListener(new Player.EventListener() {
-//                    @Override
-//                    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-//
-//                        if (playbackState == Player.STATE_ENDED) {
-//
-//                            mPauseSongIcon.setVisibility(View.GONE);
-//                            mPlaySongIcon.setVisibility(View.VISIBLE);
-//
-//                            createNotification.player1.setPlayWhenReady(false);
-//                            createNotification.player1.release();
-//                            createNotification.player1 = null;
-//
-//                        } else if (playbackState == Player.STATE_READY) {
-//
-//                            mProgressbarLayout.setVisibility(View.GONE);
-//                            mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                        } else if (playbackState == Player.STATE_BUFFERING) {
-//
-//                            mProgressbarLayout.setVisibility(View.VISIBLE);
-//                            mContext.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//                                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                        } else {
-//
-//                            mProgressbarLayout.setVisibility(View.GONE);
-//                            mContext.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-//
-//                        }
-//                    }
-//                });
-
-
             }
         }
 
@@ -605,6 +473,7 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
     private void LoadCategoryPosts() {
 
         mPlayListModelClass.clear();
+        mAllSongsList.clear();
 
         for (CategoryViewModelClass viewModelClass : mPlayAllSongsModelClass) {
 
@@ -615,6 +484,20 @@ public class PlayListHelperClass implements LoginInterface, PlayListInterface {
 
             }
         }
+
+
+        for (CategoryViewModelClass modelClass : mPlayAllSongsModelClass){
+
+            if (modelClass.getPaid_content().equalsIgnoreCase("0")){
+
+                mAllSongsList.add(modelClass);
+
+            }
+        }
+
+        mFilteredSongsList.add(categoryViewModelClass);
+        mFilteredSongsList.addAll(mAllSongsList);
+
 
         mSortedSongsList.add(categoryViewModelClass);
         mSortedSongsList.addAll(mPlayListModelClass);

@@ -15,8 +15,8 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
-            android:scaleType="fitXY"
-            android:contentDescription="@string/app_name" />
+            android:contentDescription="@string/app_name"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/song_title"
@@ -25,7 +25,9 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="18dp"
             android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@+id/song_play_icon"
             android:layout_toEndOf="@+id/play_list_song_image"
+            android:ellipsize="end"
             android:fontFamily="@font/lato_bold"
             android:text="@string/song_name"
             android:textColor="@color/colorBlack"
@@ -38,11 +40,15 @@
             android:layout_below="@+id/song_title"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
+            android:layout_marginRight="10dp"
+            android:layout_toStartOf="@id/song_play_icon"
             android:layout_toEndOf="@+id/play_list_song_image"
             android:alpha=".3"
+            android:ellipsize="end"
             android:text="@string/artist_name"
             android:textColor="@color/colorBlack"
             android:textSize="12sp" />
+
 
         <ImageView
             android:id="@+id/song_play_icon"
@@ -51,9 +57,9 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="24dp"
+            android:contentDescription="@string/app_name"
             android:src="@mipmap/play_button"
-            android:visibility="visible"
-            android:contentDescription="@string/app_name" />
+            android:visibility="visible" />
 
     </RelativeLayout>
 

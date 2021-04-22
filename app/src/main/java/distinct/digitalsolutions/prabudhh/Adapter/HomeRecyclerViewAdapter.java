@@ -19,6 +19,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import distinct.digitalsolutions.prabudhh.Activities.CategoryViewActivity;
+import distinct.digitalsolutions.prabudhh.Activities.SubCategoryActivity;
 import distinct.digitalsolutions.prabudhh.Model.HomeModelClass;
 import distinct.digitalsolutions.prabudhh.Model.WhichAreModelClass;
 import distinct.digitalsolutions.prabudhh.R;
@@ -27,11 +28,15 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
     public List<HomeModelClass> mHomeModelClass;
     public Activity mHomeActivity;
+    public int value;
+    private String categoryName;
 
-    public HomeRecyclerViewAdapter(Activity mHomeActivity, List<HomeModelClass> mHomeModelClass) {
+    public HomeRecyclerViewAdapter(Activity mHomeActivity, List<HomeModelClass> mHomeModelClass,int value,String categoryName) {
 
         this.mHomeModelClass = mHomeModelClass;
         this.mHomeActivity = mHomeActivity;
+        this.value = value;
+        this.categoryName = categoryName;
     }
 
     public static class HomeRecyclerViewHolder extends RecyclerView.ViewHolder {
@@ -69,9 +74,19 @@ public class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerVi
 
         homeRecyclerViewHolder.mCategoryLayout.setOnClickListener(v -> {
 
-            Intent homeIntent = new Intent(mHomeActivity, CategoryViewActivity.class);
+            Intent homeIntent;
+
+            if (value == 0){
+
+                homeIntent = new Intent(mHomeActivity, CategoryViewActivity.class);
+
+            }else {
+
+                homeIntent = new Intent(mHomeActivity, SubCategoryActivity.class);
+                homeIntent.putExtra("category",categoryName);
+
+            }
             homeIntent.putExtra("category_name",homeModelClass.getCategory_name());
-         //   homeIntent.putExtra("category_id",homeModelClass.getCategory_id());
             mHomeActivity.startActivity(homeIntent);
 
         });

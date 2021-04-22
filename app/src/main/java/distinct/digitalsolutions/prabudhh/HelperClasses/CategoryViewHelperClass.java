@@ -2,7 +2,6 @@ package distinct.digitalsolutions.prabudhh.HelperClasses;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.text.Editable;
@@ -17,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,12 +30,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import distinct.digitalsolutions.prabudhh.Activities.CategoryViewActivity;
 import distinct.digitalsolutions.prabudhh.Activities.MainActivity;
 import distinct.digitalsolutions.prabudhh.Activities.PaymentActivity;
 import distinct.digitalsolutions.prabudhh.Activities.PlayListSongActivity;
-import distinct.digitalsolutions.prabudhh.Adapter.CategoryViewRecyclerViewAdapter;
 import distinct.digitalsolutions.prabudhh.Adapter.HomeRecyclerViewAdapter;
+import distinct.digitalsolutions.prabudhh.Adapter.SubCategoryViewRecyclerViewAdapter;
 import distinct.digitalsolutions.prabudhh.Database.FirebaseDatabaseClass;
 import distinct.digitalsolutions.prabudhh.Interfaces.CategoryFirebaseInterface;
 import distinct.digitalsolutions.prabudhh.Interfaces.FirebaseDatabaseInterface;
@@ -60,8 +57,8 @@ public class CategoryViewHelperClass implements LoginInterface {
     private TextView mCategoryName;
 
     private RecyclerView mCategoryViewRecyclerview;
-    private CategoryViewRecyclerViewAdapter mCategoryViewRecyclerViewAdapter;
-    private List<CategoryViewModelClass> mCategoryViewModelClass = new ArrayList<>();
+    private HomeRecyclerViewAdapter mCategoryViewRecyclerViewAdapter;
+    private List<HomeModelClass> mCategoryViewModelClass = new ArrayList<>();
     private String categoryName;
 
     private FirebaseDatabaseClass mCategoryFirebaseDatabaseClass;
@@ -194,11 +191,12 @@ public class CategoryViewHelperClass implements LoginInterface {
 
         } else {
 
-            mCategoryFirebaseDatabaseClass.getContent(categoryName, searchValue, new CategoryFirebaseInterface() {
+            mCategoryFirebaseDatabaseClass.getSubCategoriesList(categoryName, searchValue, new FirebaseDatabaseInterface() {
                 @Override
-                public void onSuccess(List<CategoryViewModelClass> categoryViewModelClasses, List<CategoryViewModelClass> allSongsList) {
+                public void onSuccess(List<HomeModelClass> homeModelClasses) {
 
-                    loadDataIntoRecyclerView(categoryViewModelClasses);
+                    loadDataIntoRecyclerView(homeModelClasses);
+
                 }
 
                 @Override
@@ -216,12 +214,13 @@ public class CategoryViewHelperClass implements LoginInterface {
 
         progressBarClass.setProgressBarVisible(mProgressBarLayout);
 
-        mCategoryFirebaseDatabaseClass.getContent(categoryName, "", new CategoryFirebaseInterface() {
+        mCategoryFirebaseDatabaseClass.getSubCategoriesList(categoryName, "", new FirebaseDatabaseInterface() {
+
             @Override
-            public void onSuccess(List<CategoryViewModelClass> categoryViewModelClasses, List<CategoryViewModelClass> allSongsList) {
+            public void onSuccess(List<HomeModelClass> homeModelClasses) {
 
                 progressBarClass.setProgressBarNotVisible(mProgressBarLayout);
-                loadDataIntoRecyclerView(categoryViewModelClasses);
+                loadDataIntoRecyclerView(homeModelClasses);
 
             }
 
@@ -236,13 +235,11 @@ public class CategoryViewHelperClass implements LoginInterface {
 
     }
 
-    private void loadDataIntoRecyclerView(List<CategoryViewModelClass> categoryViewModelClasses) {
+    private void loadDataIntoRecyclerView(List<HomeModelClass> homeModelClasses) {
 
-        mCategoryViewModelClass = categoryViewModelClasses;
+        mCategoryViewModelClass = homeModelClasses;
 
-        mCategoryViewRecyclerViewAdapter = new CategoryViewRecyclerViewAdapter(
-                //mCategoryid,
-                categoryName, mContext, mCategoryViewModelClass, paymentAlertInterface);
+        mCategoryViewRecyclerViewAdapter = new HomeRecyclerViewAdapter(mContext,homeModelClasses,1,categoryName);
         mCategoryViewRecyclerview.setAdapter(mCategoryViewRecyclerViewAdapter);
         mCategoryViewRecyclerViewAdapter.notifyDataSetChanged();
 

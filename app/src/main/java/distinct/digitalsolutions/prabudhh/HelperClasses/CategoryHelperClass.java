@@ -158,7 +158,7 @@ public class CategoryHelperClass implements LoginInterface {
 
         mHomeModelClass = homeModelClasses;
 
-        mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter(mContext, mHomeModelClass);
+        mHomeRecyclerViewAdapter = new HomeRecyclerViewAdapter(mContext, mHomeModelClass,0,"");
         mHomeRecyclerView.setAdapter(mHomeRecyclerViewAdapter);
         mHomeRecyclerViewAdapter.notifyDataSetChanged();
 

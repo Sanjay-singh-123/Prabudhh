@@ -2,31 +2,17 @@ package distinct.digitalsolutions.prabudhh.HelperClasses;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.exoplayer2.ExoPlayer;
-import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.ui.PlayerNotificationManager;
-import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,21 +25,16 @@ import java.util.Locale;
 import distinct.digitalsolutions.prabudhh.Activities.CreateNotification;
 import distinct.digitalsolutions.prabudhh.Activities.PaymentActivity;
 import distinct.digitalsolutions.prabudhh.Activities.PlayListSongActivity;
-import distinct.digitalsolutions.prabudhh.Activities.SingleSongActivity;
-import distinct.digitalsolutions.prabudhh.Adapter.CategoryViewRecyclerViewAdapter;
-import distinct.digitalsolutions.prabudhh.Adapter.PlayListRecyclerviewAdapter;
+import distinct.digitalsolutions.prabudhh.Adapter.SubCategoryViewRecyclerViewAdapter;
 import distinct.digitalsolutions.prabudhh.Database.FirebaseDatabaseClass;
 import distinct.digitalsolutions.prabudhh.Interfaces.CategoryFirebaseInterface;
 import distinct.digitalsolutions.prabudhh.Interfaces.LoginInterface;
 import distinct.digitalsolutions.prabudhh.Interfaces.MostPlayedSongInterface;
-import distinct.digitalsolutions.prabudhh.Interfaces.NotificationInterface;
 import distinct.digitalsolutions.prabudhh.Interfaces.PaymentAlertInterface;
-import distinct.digitalsolutions.prabudhh.Interfaces.PlayListInterface;
 import distinct.digitalsolutions.prabudhh.Interfaces.SongPostFirebaseInterface;
 import distinct.digitalsolutions.prabudhh.Model.CategoryViewModelClass;
 import distinct.digitalsolutions.prabudhh.Model.MostlyPlayed;
 import distinct.digitalsolutions.prabudhh.R;
-import distinct.digitalsolutions.prabudhh.SharedPreference.PlaySongSharedPreference;
 
 public class HomeHelperClass implements LoginInterface {
 
@@ -63,12 +44,12 @@ public class HomeHelperClass implements LoginInterface {
 
 
     private RecyclerView mHomeMostlyPlayedRecyclerView;
-    private CategoryViewRecyclerViewAdapter mHomeCategoryAdapter;
+    private SubCategoryViewRecyclerViewAdapter mHomeCategoryAdapter;
     private List<CategoryViewModelClass> mHomeCategoryModelClass = new ArrayList<>();
     private List<MostlyPlayed> mMostlyPlayed = new ArrayList<>();
 
     private RecyclerView mHomeRecommendedRecyclerView;
-    private CategoryViewRecyclerViewAdapter mHomeRecommendedAdapter;
+    private SubCategoryViewRecyclerViewAdapter mHomeRecommendedAdapter;
     private List<CategoryViewModelClass> mHomeRecommendedPlayList = new ArrayList<>();
 
 
@@ -135,7 +116,7 @@ public class HomeHelperClass implements LoginInterface {
 
                 mHomeRecommendedPlayList = categoryViewModelClasses;
 
-                mHomeRecommendedAdapter = new CategoryViewRecyclerViewAdapter("Recommended Play List", mContext, mHomeRecommendedPlayList, paymentAlertInterface);
+                mHomeRecommendedAdapter = new SubCategoryViewRecyclerViewAdapter("Recommended Play List", mContext, mHomeRecommendedPlayList, paymentAlertInterface);
                 mHomeRecommendedRecyclerView.setAdapter(mHomeRecommendedAdapter);
                 mHomeRecommendedAdapter.notifyDataSetChanged();
 
@@ -180,7 +161,7 @@ public class HomeHelperClass implements LoginInterface {
 
                         Collections.sort(mHomeCategoryModelClass);
 
-                        mHomeCategoryAdapter = new CategoryViewRecyclerViewAdapter("Mostly Played"
+                        mHomeCategoryAdapter = new SubCategoryViewRecyclerViewAdapter("Mostly Played"
                                 , mContext, mHomeCategoryModelClass, paymentAlertInterface);
                         mHomeMostlyPlayedRecyclerView.setAdapter(mHomeCategoryAdapter);
                         mHomeCategoryAdapter.notifyDataSetChanged();

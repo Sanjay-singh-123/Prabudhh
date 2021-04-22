@@ -74,6 +74,8 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
     private NotificationInterface notificationInterface;
 
+    private List<CategoryViewModelClass> mFilteredSongsList = new ArrayList<>();
+
     private SimpleExoPlayer simpleExoPlayer;
     private String mCategoryName;
 
@@ -108,7 +110,7 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
                 createNotification.player1.release();
                 createNotification.player1 = null;
 
-                createNotification.playSongMethod(mCategoryViewHelperClasses, mCategoryName, mCategoryViewModelClass);
+                createNotification.playSongMethod(mFilteredSongsList, mCategoryName, mCategoryViewModelClass);
 
             }
 
@@ -128,8 +130,7 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
     public SingleSongHelperClass(Activity mContext, ViewGroup viewGroup, CategoryViewModelClass mCategoryViewModelClass,
                                  String mCategoryName, List<CategoryViewModelClass> mCategoryViewHelperClasses, int value,
-                                 NotificationInterface notificationInterface, int mBackButton
-                                 //,String mCategoryId
+                                 NotificationInterface notificationInterface, int mBackButton,List<CategoryViewModelClass> filteredSongsList
     ) {
 
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.activity_single_song, viewGroup);
@@ -148,6 +149,8 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
         firebaseDatabaseClass = new FirebaseDatabaseClass();
 
         playSongSharedPreference = new PlaySongSharedPreference(mContext);
+
+        this.mFilteredSongsList = filteredSongsList;
 
 //        this.mSecondCategoryViewHelperClass.add(mCategoryViewModelClass);
 //        this.mSecondCategoryViewHelperClass.addAll(mCategoryViewHelperClasses);
@@ -217,6 +220,7 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
                 playListIntent.putExtra("category_name", mCategoryName);
                 playListIntent.putExtra("song_details", new Gson().toJson(mCategoryViewHelperClasses.get(0)));
                 playListIntent.putExtra("all_songs", new Gson().toJson(mCategoryViewHelperClasses));
+                playListIntent.putExtra("filtered_songs",new Gson().toJson(mFilteredSongsList));
                 playListIntent.putExtra("back_button", mBackButton);
                 mContext.startActivity(playListIntent);
                 mContext.overridePendingTransition(0, 0);
@@ -312,6 +316,12 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
     private void nextSongMethod() {
 
+//        if (createNotification.modelClass.getPaid_content().equalsIgnoreCase("1")) {
+//
+//            createNotification.player1.next();
+//
+//        }
+
         saveSongCount(createNotification.modelClass.getSong_id());
         setSongDetails(createNotification.modelClass.getTitle(), createNotification.modelClass.getDescription(), createNotification.modelClass.getImg_url());
 
@@ -368,7 +378,7 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
     public void BackPressed() {
 
-        playSongSharedPreference.setPlayingSongDetails("playing_song_details",new Gson().toJson(mCategoryViewModelClass));
+        playSongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(mCategoryViewModelClass));
 
         Intent intent = new Intent(mContext, PlayListSongActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);//intent.putExtra("category_id",mCategoryId);

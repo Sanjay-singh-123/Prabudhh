@@ -127,12 +127,60 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
     }
 
-    public void getContent(String categoryName, String searchSong, CategoryFirebaseInterface categoryFirebaseInterface) {
+    public void getSubCategoriesList(String categoryName, String searchSubCategory, FirebaseDatabaseInterface firebaseDatabaseInterface) {
+
+        List<HomeModelClass> subCategoryList = new ArrayList<>();
+
+        mFirebaseDatabase.child("sub_categorys").child(categoryName).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+
+                    String subCategoryId = dataSnapshot.child("sub_category_id").getValue().toString();
+                    String subCategoryName = dataSnapshot.child("sub_category_name").getValue().toString();
+                    String thumbNail = dataSnapshot.child("thumbnail").getValue().toString();
+
+                    HomeModelClass homeModelClass = new HomeModelClass(subCategoryId, subCategoryName, thumbNail);
+
+                    if (TextUtils.isEmpty(searchSubCategory) || searchSubCategory.equalsIgnoreCase("")) {
+
+                        subCategoryList.add(homeModelClass);
+
+                    } else {
+
+                        if (subCategoryName != null) {
+
+                            if (subCategoryName.toLowerCase().contains(searchSubCategory)) {
+
+                                subCategoryList.add(homeModelClass);
+
+                            }
+                        }
+                    }
+
+                }
+
+                firebaseDatabaseInterface.onSuccess(subCategoryList);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+                firebaseDatabaseInterface.onFailure("Failed To get Data");
+
+            }
+        });
+
+    }
+
+    public void getContent(String subCategoryName, String searchSong, CategoryFirebaseInterface categoryFirebaseInterface) {
 
         List<CategoryViewModelClass> categoryViewModelClasses = new ArrayList<>();
         List<CategoryViewModelClass> allSongsList = new ArrayList<>();
 
-        mFirebaseDatabase.child("content").child(categoryName).addValueEventListener(new ValueEventListener() {
+        mFirebaseDatabase.child("Music").child(subCategoryName).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -212,65 +260,76 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
         List<WhichAreModelClass> whichAreModelClass = new ArrayList<>();
 
-        mFirebaseDatabase.child("SongPosts").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                String total = String.valueOf(snapshot.getChildrenCount());
-                int value = 0;
+            mFirebaseDatabase.child("SongPosts").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String total = String.valueOf(snapshot.getChildrenCount());
+                    int value = 0;
 
-                    value++;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    String userId = dataSnapshot.child("User").getValue().toString();
-                    String post = dataSnapshot.child("Song").getValue().toString();
+                        value++;
 
-                    int finalValue = value;
+                        String userId = dataSnapshot.child("User").getValue().toString();
+                        String post = dataSnapshot.child("Song").getValue().toString();
 
-                    mFirebaseDatabase.child("User_Details").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        int finalValue = value;
 
-                            String thumbNail = "";
-                            String image = "";
+                        mFirebaseDatabase.child("User_Details").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                            if (snapshot.hasChild("thumbnail")){
+                                String thumbNail = "";
+                                String image = "";
 
-                                thumbNail = snapshot.child("thumbnail").getValue().toString();
-                                image = snapshot.child("image").getValue().toString();
+                                if (snapshot.hasChild("thumbnail")) {
 
+                                    thumbNail = snapshot.child("thumbnail").getValue().toString();
+                                    image = snapshot.child("image").getValue().toString();
+
+                                }
+
+                                try{
+
+                                   String  userName = snapshot.child("user_name").getValue().toString();
+
+                                    WhichAreModelClass whichAreModelClass1 = new WhichAreModelClass(post, userName, thumbNail, image);
+                                    whichAreModelClass.add(whichAreModelClass1);
+
+                                }catch (Exception e){}
+
+
+                                if (finalValue >= Integer.parseInt(total)) {
+
+                                    whichAreInterface.onSuccess(whichAreModelClass);
+
+                                }
                             }
 
-                            String userName = snapshot.child("user_name").getValue().toString();
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                            WhichAreModelClass whichAreModelClass1 = new WhichAreModelClass(post, userName, thumbNail, image);
-                            whichAreModelClass.add(whichAreModelClass1);
-
-                            if (finalValue >= Integer.parseInt(total)){
-
-                                whichAreInterface.onSuccess(whichAreModelClass);
 
                             }
-                        }
+                        });
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-
-                        }
-                    });
+                    }
 
                 }
 
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    whichAreInterface.onFailure(error.getMessage());
+                }
+            });
 
-                whichAreInterface.onFailure(error.getMessage());
-            }
-        });
+        } catch (Exception e) {
+        }
+
 
     }
 
@@ -613,7 +672,7 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
         List<CategoryViewModelClass> categoryViewModelClasses = new ArrayList<>();
         List<CategoryViewModelClass> allSongs = new ArrayList<>();
 
-        mFirebaseDatabase.child("content").addValueEventListener(new ValueEventListener() {
+        mFirebaseDatabase.child("Music").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -656,7 +715,7 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
         List<CategoryViewModelClass> playListHelperClasses = new ArrayList<>();
         List<CategoryViewModelClass> allSongsListClass = new ArrayList<>();
 
-        mFirebaseDatabase.child("content").addValueEventListener(new ValueEventListener() {
+        mFirebaseDatabase.child("Music").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 

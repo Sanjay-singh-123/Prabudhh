@@ -36,6 +36,7 @@
 
     <string name="category_name">Category Name</string>
 
+    <string name="sub_category">Sub Category Name</string>
     <string name="skip">SKIP</string>
 
     <string name="category_search">Search Category...</string>

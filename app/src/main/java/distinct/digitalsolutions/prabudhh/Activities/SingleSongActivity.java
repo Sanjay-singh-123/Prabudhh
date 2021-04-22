@@ -21,11 +21,10 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
 
     private SingleSongHelperClass mSingleSongHelperClass;
     private CategoryViewModelClass mCategoryViewModelClass;
-    private String mCategoryName
-            //,mCategoryId
-            ;
+    private String mCategoryName;
     private int mBackButton;
     private List<CategoryViewModelClass> mPlayAllSongsList = new ArrayList<>();
+    private List<CategoryViewModelClass> mFilteredSongsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +32,7 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
 
         Type type = new TypeToken<List<CategoryViewModelClass>>() {}.getType();
         mPlayAllSongsList = new Gson().fromJson(getIntent().getStringExtra("all_songs"), type);
+        mFilteredSongsList = new Gson().fromJson(getIntent().getStringExtra("filtered_songs"),type);
         mBackButton = getIntent().getIntExtra("back_button",0);
 
         int songValue = getIntent().getIntExtra("songValue",0);
@@ -41,10 +41,9 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
         mCategoryViewModelClass = new Gson().fromJson(getIntent().getStringExtra("song_details"),CategoryViewModelClass.class);
         mCategoryName = getIntent().getStringExtra("category_name");
 
+
         mSingleSongHelperClass = new SingleSongHelperClass(SingleSongActivity.this,null,mCategoryViewModelClass,mCategoryName,
-                mPlayAllSongsList,songValue,this,mBackButton
-                //,mCategoryId
-                );
+                mPlayAllSongsList,songValue,this,mBackButton,mFilteredSongsList);
         setContentView(mSingleSongHelperClass.getRootView());
 
     }
