@@ -17,6 +17,6 @@
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
         android:scaleType="fitXY"
-        android:src="@mipmap/subscription_image" />
+        android:src="@mipmap/app_logo" />
 
 </androidx.cardview.widget.CardView>
