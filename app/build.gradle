@@ -9,9 +9,9 @@ android {
         applicationId "distinct.digitalsolutions.prabudhh"
         minSdkVersion 22
         targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
+        versionCode 6
+        versionName "1.5"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -19,6 +19,11 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -74,5 +79,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     implementation 'com.github.barteksc:android-pdf-viewer:3.2.0-beta.1'
+
+    //LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 
 }

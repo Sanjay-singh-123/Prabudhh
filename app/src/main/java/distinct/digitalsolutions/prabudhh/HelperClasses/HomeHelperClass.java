@@ -42,17 +42,15 @@ public class HomeHelperClass implements LoginInterface {
 
     private FirebaseDatabaseClass firebaseDatabaseClass;
 
-
     private RecyclerView mHomeMostlyPlayedRecyclerView;
-    private SubCategoryViewRecyclerViewAdapter mHomeCategoryAdapter;
+    private SubCategoryViewRecyclerViewAdapter mHomeMostlyPlayedAdapter;
     private List<CategoryViewModelClass> mHomeCategoryModelClass = new ArrayList<>();
+
     private List<MostlyPlayed> mMostlyPlayed = new ArrayList<>();
 
     private RecyclerView mHomeRecommendedRecyclerView;
     private SubCategoryViewRecyclerViewAdapter mHomeRecommendedAdapter;
     private List<CategoryViewModelClass> mHomeRecommendedPlayList = new ArrayList<>();
-
-
 
     private Activity mContext;
     private RelativeLayout mHomeProgressBar;
@@ -60,8 +58,6 @@ public class HomeHelperClass implements LoginInterface {
 
     private TextView mRecommendedHeader, mMostlyPlayedHeader;
     private PaymentAlertInterface paymentAlertInterface;
-    private FirebaseDatabaseClass mFirebaseDatabase;
-    private CreateNotification createNotification;
 
     public HomeHelperClass(Activity mContext, LayoutInflater inflater, ViewGroup viewGroup, PaymentAlertInterface paymentAlertInterface) {
 
@@ -70,8 +66,7 @@ public class HomeHelperClass implements LoginInterface {
 
         mHomeHelperRecyclerView = inflater.inflate(R.layout.fragment_home, viewGroup, false);
 
-        mFirebaseDatabase = new FirebaseDatabaseClass();
-        firebaseDatabaseClass = new FirebaseDatabaseClass();
+        firebaseDatabaseClass = new FirebaseDatabaseClass(mContext);
         progressBarClass = new ProgressBarClass(mContext);
 
     }
@@ -84,29 +79,32 @@ public class HomeHelperClass implements LoginInterface {
         mRecommendedHeader = mContext.findViewById(R.id.recommended_text);
         mMostlyPlayedHeader = mContext.findViewById(R.id.mostly_played_text);
 
+        //Mostly Played Songs
         mHomeMostlyPlayedRecyclerView = mContext.findViewById(R.id.mostly_played_recycler_view);
         mHomeMostlyPlayedRecyclerView.setNestedScrollingEnabled(false);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false);
-        mHomeMostlyPlayedRecyclerView.setLayoutManager(layoutManager);
+        LinearLayoutManager mostlyPlayedLayoutManager = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL,false);
+        mHomeMostlyPlayedRecyclerView.setLayoutManager(mostlyPlayedLayoutManager);
 
+        mRecommendedHeader.setVisibility(View.GONE);
+
+        //Recommended Played Songs
         mHomeRecommendedRecyclerView = mContext.findViewById(R.id.recommended_recycler_view);
         mHomeRecommendedRecyclerView.setNestedScrollingEnabled(false);
 
         LinearLayoutManager recommendedLayoutManger = new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false);
         mHomeRecommendedRecyclerView.setLayoutManager(recommendedLayoutManger);
 
-        mRecommendedHeader.setVisibility(View.GONE);
         mMostlyPlayedHeader.setVisibility(View.GONE);
 
         progressBarClass.setProgressBarVisible(mHomeProgressBar);
 
-        LoadRecommendedPosts();
-        LoadCategoryPosts();
+        LoadRecommendedSongs();
+        LoadMostlyPlayedSongs();
 
     }
 
-    private void LoadRecommendedPosts() {
+    private void LoadRecommendedSongs() {
 
         mHomeRecommendedPlayList.clear();
 
@@ -116,15 +114,12 @@ public class HomeHelperClass implements LoginInterface {
 
                 mHomeRecommendedPlayList = categoryViewModelClasses;
 
-                mHomeRecommendedAdapter = new SubCategoryViewRecyclerViewAdapter("Recommended Play List", mContext, mHomeRecommendedPlayList, paymentAlertInterface);
+                mHomeRecommendedAdapter = new SubCategoryViewRecyclerViewAdapter("Recommended Play List", mContext, mHomeRecommendedPlayList, paymentAlertInterface,"");
                 mHomeRecommendedRecyclerView.setAdapter(mHomeRecommendedAdapter);
                 mHomeRecommendedAdapter.notifyDataSetChanged();
 
                 mRecommendedHeader.setVisibility(View.VISIBLE);
 
-                //  LoadCategoryPosts();
-
-                //progressBarClass.setProgressBarNotVisible(mHomeProgressBar);
             }
 
             @Override
@@ -136,7 +131,7 @@ public class HomeHelperClass implements LoginInterface {
         });
     }
 
-    private void LoadCategoryPosts() {
+    private void LoadMostlyPlayedSongs() {
 
         mHomeCategoryModelClass.clear();
 
@@ -151,6 +146,7 @@ public class HomeHelperClass implements LoginInterface {
                 if (mMostlyPlayed.size() > 10) {
 
                     mMostlyPlayed.subList(11, mMostlyPlayed.size()).clear();
+
                 }
 
                 firebaseDatabaseClass.getFinalMostlyPlayedSongsData(mMostlyPlayed, new CategoryFirebaseInterface() {
@@ -161,10 +157,9 @@ public class HomeHelperClass implements LoginInterface {
 
                         Collections.sort(mHomeCategoryModelClass);
 
-                        mHomeCategoryAdapter = new SubCategoryViewRecyclerViewAdapter("Mostly Played"
-                                , mContext, mHomeCategoryModelClass, paymentAlertInterface);
-                        mHomeMostlyPlayedRecyclerView.setAdapter(mHomeCategoryAdapter);
-                        mHomeCategoryAdapter.notifyDataSetChanged();
+                        mHomeMostlyPlayedAdapter = new SubCategoryViewRecyclerViewAdapter("Mostly Played", mContext, mHomeCategoryModelClass, paymentAlertInterface,"");
+                        mHomeMostlyPlayedRecyclerView.setAdapter(mHomeMostlyPlayedAdapter);
+                        mHomeMostlyPlayedAdapter.notifyDataSetChanged();
 
                         mMostlyPlayedHeader.setVisibility(View.VISIBLE);
 
@@ -200,11 +195,9 @@ public class HomeHelperClass implements LoginInterface {
         return mHomeHelperRecyclerView;
     }
 
-    public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName, List<CategoryViewModelClass> categoryViewModelClasses
-                                //, String mCategoryid
-    ) {
+    public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName, List<CategoryViewModelClass> categoryViewModelClasses) {
 
-        mFirebaseDatabase.checkUserPaymentStatus(new SongPostFirebaseInterface() {
+        firebaseDatabaseClass.checkUserPaymentStatus(new SongPostFirebaseInterface() {
             @Override
             public void onSuccess(String success, String date, String expiryDate) {
 

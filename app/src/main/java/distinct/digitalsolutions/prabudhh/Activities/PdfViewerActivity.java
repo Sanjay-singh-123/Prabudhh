@@ -64,7 +64,7 @@ public class PdfViewerActivity extends AppCompatActivity implements Notification
     }
 
     @Override
-    public void notificationEvents(int play, int pause) {
+    public void notificationEvents(int play, int pause,int next,int previous) {
 
         if (play == 1){
 

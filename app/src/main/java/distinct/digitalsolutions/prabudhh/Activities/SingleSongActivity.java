@@ -25,6 +25,7 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
     private int mBackButton;
     private List<CategoryViewModelClass> mPlayAllSongsList = new ArrayList<>();
     private List<CategoryViewModelClass> mFilteredSongsList = new ArrayList<>();
+    private String mSubCategoryName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
         mPlayAllSongsList = new Gson().fromJson(getIntent().getStringExtra("all_songs"), type);
         mFilteredSongsList = new Gson().fromJson(getIntent().getStringExtra("filtered_songs"),type);
         mBackButton = getIntent().getIntExtra("back_button",0);
+        mSubCategoryName = getIntent().getStringExtra("sub_category_name");
 
         int songValue = getIntent().getIntExtra("songValue",0);
        // mCategoryId = getIntent().getStringExtra("category_id");
@@ -43,7 +45,7 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
 
 
         mSingleSongHelperClass = new SingleSongHelperClass(SingleSongActivity.this,null,mCategoryViewModelClass,mCategoryName,
-                mPlayAllSongsList,songValue,this,mBackButton,mFilteredSongsList);
+                mPlayAllSongsList,songValue,this,mBackButton,mFilteredSongsList,mSubCategoryName);
         setContentView(mSingleSongHelperClass.getRootView());
 
     }
@@ -82,7 +84,7 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
     }
 
     @Override
-    public void notificationEvents(int play, int pause) {
+    public void notificationEvents(int play, int pause,int next,int previous) {
 
         if (play == 1){
 
@@ -91,6 +93,15 @@ public class SingleSongActivity extends AppCompatActivity implements Notificatio
         }else if (pause == 1){
 
             mSingleSongHelperClass.pauseButtonClicked();
+
+        }else if (next == 1){
+
+            mSingleSongHelperClass.nextSongMethod();
+
+        }else if (previous == 1){
+
+            mSingleSongHelperClass.nextSongMethod();
+
         }
 
     }

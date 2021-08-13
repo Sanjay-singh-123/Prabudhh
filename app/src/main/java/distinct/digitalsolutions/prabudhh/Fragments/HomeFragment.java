@@ -48,9 +48,7 @@ public class HomeFragment extends Fragment implements PaymentAlertInterface {
     }
 
     @Override
-    public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName,List<CategoryViewModelClass> categoryViewModelClasses
-            //, String categoryId
-    ) {
+    public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName,List<CategoryViewModelClass> categoryViewModelClasses) {
 
         mHomeHelperClass.showAlertDialog(categoryViewModelClass,categoryName,categoryViewModelClasses);
 

@@ -20,28 +20,30 @@ import distinct.digitalsolutions.prabudhh.Model.CategoryViewModelClass;
 public class PlayListSongActivity extends AppCompatActivity implements NotificationInterface, PaymentAlertInterface {
 
     private PlayListHelperClass mPlayListHelperClass;
-    private CategoryViewModelClass mPlayCategoryModelClass;
-    private String mCategoryName;
+    private String mCategoryName,mSubCategoryName;
     //mCategoryId;
     private int mValue, mSameActivity,mBackButton;
     private List<CategoryViewModelClass> mPlayAllSongsModelClass = new ArrayList<>();
+
+    private CategoryViewModelClass mPlayCategoryModelClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        TypeToken<List<CategoryViewModelClass>> token = new TypeToken<List<CategoryViewModelClass>>() {
-        };
 
         mBackButton = getIntent().getIntExtra("back_button",0);
         mSameActivity = getIntent().getIntExtra("same_activity", 0);
-        mPlayCategoryModelClass = new Gson().fromJson(getIntent().getStringExtra("song_details"), CategoryViewModelClass.class);
         mCategoryName = getIntent().getStringExtra("category_name");
+        mSubCategoryName = getIntent().getStringExtra("sub_category_name");
+
+        TypeToken<List<CategoryViewModelClass>> token = new TypeToken<List<CategoryViewModelClass>>() {};
+
         mPlayAllSongsModelClass = new Gson().fromJson(getIntent().getStringExtra("all_songs"), token.getType());
+        mPlayCategoryModelClass = new Gson().fromJson(getIntent().getStringExtra("song_details"), CategoryViewModelClass.class);
 
         mPlayListHelperClass = new PlayListHelperClass(PlayListSongActivity.this, null, mPlayCategoryModelClass,
-                mCategoryName,
-                this, this, mSameActivity, mPlayAllSongsModelClass,mBackButton);
+                mCategoryName, this, this, mSameActivity, mPlayAllSongsModelClass,mBackButton,mSubCategoryName);
         setContentView(mPlayListHelperClass.getRootView());
 
     }
@@ -62,7 +64,7 @@ public class PlayListSongActivity extends AppCompatActivity implements Notificat
     }
 
     @Override
-    public void notificationEvents(int play, int pause) {
+    public void notificationEvents(int play, int pause,int next,int previous) {
 
         if (play == 1) {
 
@@ -71,6 +73,14 @@ public class PlayListSongActivity extends AppCompatActivity implements Notificat
         } else if (pause == 1) {
 
             mPlayListHelperClass.pauseButton();
+
+        } else if (next == 1) {
+
+            mPlayListHelperClass.playNextMethod();
+
+        } else if (previous == 1) {
+
+            mPlayListHelperClass.playPreviousMethod();
 
         }
 

@@ -74,7 +74,7 @@ public class NewUserDetailsHelperClass implements LoginInterface {
         this.mContext = context;
 
         this.mValue = mValue;
-        mUserDetailsFirebaseDatabase = new FirebaseDatabaseClass();
+        mUserDetailsFirebaseDatabase = new FirebaseDatabaseClass(mContext);
         mProgressBarClass = new ProgressBarClass(mContext);
 
         mUserDetailsUserSharedPreference = new UserSharedPreferences(mContext);

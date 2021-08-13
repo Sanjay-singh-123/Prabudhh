@@ -47,10 +47,9 @@ public class CategoryHelperClass implements LoginInterface {
 
         this.mContext = context;
 
-        mHomeFirebaseDataClass = new FirebaseDatabaseClass();
+        mHomeFirebaseDataClass = new FirebaseDatabaseClass(mContext);
 
         progressBarClass = new ProgressBarClass(mContext);
-
 
     }
 
@@ -128,7 +127,6 @@ public class CategoryHelperClass implements LoginInterface {
     }
 
     private void LoadCategoryPosts() {
-
 
         progressBarClass.setProgressBarVisible(mHomeProgressBar);
 

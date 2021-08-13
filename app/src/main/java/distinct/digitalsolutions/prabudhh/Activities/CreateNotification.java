@@ -88,9 +88,7 @@ public class CreateNotification extends Service{
         return mBinder;
     }
 
-    public void playSongMethod(List<CategoryViewModelClass> categoryViewModelClasses, String categoryName, CategoryViewModelClass viewModelClass
-    //                           String mCategoryId
-    ) {
+    public void playSongMethod(List<CategoryViewModelClass> categoryViewModelClasses, String categoryName, CategoryViewModelClass viewModelClass,boolean value) {
 
         player1 = ExoPlayerFactory.newSimpleInstance(context, new DefaultTrackSelector());
         //this.mCategoryID = mCategoryId;
@@ -104,16 +102,12 @@ public class CreateNotification extends Service{
 
         for (CategoryViewModelClass categoryViewModelClass : categoryViewModelClasses) {
 
-            MediaSource mediaSource = new ExtractorMediaSource.Factory(defaultDataSourceFactory)
-                    .createMediaSource(Uri.parse(categoryViewModelClass.getAudio_url()));
+            MediaSource mediaSource = new ExtractorMediaSource.Factory(defaultDataSourceFactory).createMediaSource(Uri.parse(categoryViewModelClass.getAudio_url()));
             concatenatingMediaSource.addMediaSource(mediaSource);
 
         }
 
         modelClass = viewModelClass;
-
-        player1.prepare(concatenatingMediaSource);
-        player1.setPlayWhenReady(true);
 
         playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
                 context, PLAYBACK_CHANNEL_ID, R.string.app_name, PLAYBACK_NOTIFICATION_ID, new PlayerNotificationManager.MediaDescriptionAdapter() {
@@ -168,6 +162,13 @@ public class CreateNotification extends Service{
                 stopSelf();
             }
         });
+
+        if (value){
+
+            player1.prepare(concatenatingMediaSource);
+            player1.setPlayWhenReady(true);
+
+        }
 
         playerNotificationManager.setPlayer(player1);
 

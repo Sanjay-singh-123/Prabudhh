@@ -44,7 +44,7 @@ public class PostHelperClass implements LoginInterface {
         mRootView = LayoutInflater.from(context).inflate(R.layout.activity_post,viewGroup);
         this.mContext = context;
 
-        mPostHelperDatabase = new FirebaseDatabaseClass();
+        mPostHelperDatabase = new FirebaseDatabaseClass(mContext);
 
         mPostUserSharedPreference = new UserSharedPreferences(mContext);
 

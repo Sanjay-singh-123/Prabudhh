@@ -29,11 +29,19 @@ public class AudioPlayerBroadcastReceiver extends BroadcastReceiver {
 
             if (action.equalsIgnoreCase(PlayerNotificationManager.ACTION_PAUSE)){
 
-                notificationInterface.notificationEvents(0,1);
+                notificationInterface.notificationEvents(0,1,0,0);
 
             }else if (action.equalsIgnoreCase(PlayerNotificationManager.ACTION_PLAY)){
 
-                notificationInterface.notificationEvents(1,0);
+                notificationInterface.notificationEvents(1,0,0,0);
+
+            }else if (action.equalsIgnoreCase(PlayerNotificationManager.ACTION_NEXT)){
+
+                notificationInterface.notificationEvents(0,0,1,0);
+
+            }else if (action.equalsIgnoreCase(PlayerNotificationManager.ACTION_PAUSE)){
+
+                notificationInterface.notificationEvents(0,0,0,1);
 
             }
 

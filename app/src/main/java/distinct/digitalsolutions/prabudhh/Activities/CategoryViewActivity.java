@@ -2,6 +2,7 @@ package distinct.digitalsolutions.prabudhh.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.List;
@@ -15,46 +16,48 @@ public class CategoryViewActivity extends AppCompatActivity implements PaymentAl
 
     private CategoryViewHelperClass mCategoryViewHolderClass;
     private String mCategoryName;
-   // private String mCategoryId;
+    // private String mCategoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mCategoryName = getIntent().getStringExtra("category_name");
-       // mCategoryId = getIntent().getStringExtra("category_id");
+        // mCategoryId = getIntent().getStringExtra("category_id");
 
-        mCategoryViewHolderClass = new CategoryViewHelperClass(CategoryViewActivity.this,null, mCategoryName,this,this);
+        mCategoryViewHolderClass = new CategoryViewHelperClass(CategoryViewActivity.this, null, mCategoryName, this, this);
         setContentView(mCategoryViewHolderClass.getRootView());
 
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         mCategoryViewHolderClass.initView();
     }
 
     @Override
-    public void onBackPressed(){
-        super.onBackPressed();
+    public void onBackPressed() {
 
-        mCategoryViewHolderClass.backMethod();
+        Intent intent = new Intent(CategoryViewActivity.this, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
     @Override
     public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName, List<CategoryViewModelClass> categoryViewModelClasses
                                 //,String categoryId
-                                ) {
+    ) {
 
-        mCategoryViewHolderClass.showAlertDialog(categoryViewModelClass,categoryName,categoryViewModelClasses
+        mCategoryViewHolderClass.showAlertDialog(categoryViewModelClass, categoryName, categoryViewModelClasses
                 //,categoryId
-                );
+        );
 
     }
 
     @Override
-    public void notificationEvents(int play, int pause) {
+    public void notificationEvents(int play, int pause,int next,int previous) {
 
         if (play == 1) {
             mCategoryViewHolderClass.playMethod();
@@ -63,6 +66,13 @@ public class CategoryViewActivity extends AppCompatActivity implements PaymentAl
 
             mCategoryViewHolderClass.pauseMethod();
 
+        }else if (next == 1){
+
+            mCategoryViewHolderClass.nextMethod();
+
+        }else if (previous == 1){
+
+            mCategoryViewHolderClass.previousMethod();
         }
 
     }

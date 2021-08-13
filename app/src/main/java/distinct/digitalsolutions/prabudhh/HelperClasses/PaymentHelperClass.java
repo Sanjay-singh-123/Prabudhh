@@ -59,7 +59,7 @@ public class PaymentHelperClass implements LoginInterface {
 
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.activity_payment, viewGroup);
 
-        mPaymentFirebaseClass = new FirebaseDatabaseClass();
+        mPaymentFirebaseClass = new FirebaseDatabaseClass(mContext);
 
         this.mContext = mContext;
 
@@ -115,7 +115,7 @@ public class PaymentHelperClass implements LoginInterface {
             currentDate = getCurrentTime();
             expiryDate = getExpiryDate(30);
 
-            doPayment("4900");
+            doPayment("100");
             mPaymentType = "0";
 
         });
@@ -150,7 +150,7 @@ public class PaymentHelperClass implements LoginInterface {
         if (mBackButtonValue == 1){
 
             intent = new Intent(mContext, MainActivity.class);
-
+            
         }else {
 
             intent = new Intent(mContext, CategoryViewActivity.class);
@@ -158,6 +158,7 @@ public class PaymentHelperClass implements LoginInterface {
             intent.putExtra("category_id", categoryId);
 
         }
+
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
 
@@ -171,7 +172,7 @@ public class PaymentHelperClass implements LoginInterface {
 
         //checkout.setKeyID("rzp_test_fnBQYSxUcVFFYU");
 
-        checkout.setImage(R.mipmap.app_logo_foreground);
+        checkout.setImage(R.mipmap.app_logo);
 
         try {
 
@@ -208,7 +209,7 @@ public class PaymentHelperClass implements LoginInterface {
             @Override
             public void onFailure(String error) {
 
-                paymentMethod(1);
+                paymentMethod(0);
 
             }
         });

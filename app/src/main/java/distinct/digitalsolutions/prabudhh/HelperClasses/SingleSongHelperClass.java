@@ -98,6 +98,9 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
     private PlaySongSharedPreference playSongSharedPreference;
     private RelativeLayout mProgressBarLayout;
 
+    private String mSubCategoryName;
+
+
     private ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -105,12 +108,14 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
             CreateNotification.MusicBinder mServiceBinder = (CreateNotification.MusicBinder) service;
             createNotification = mServiceBinder.getService();
 
+            createNotification.player1.addListener(new PlayerEventListener());
+
             if (value == 1) {
 
                 createNotification.player1.release();
                 createNotification.player1 = null;
 
-                createNotification.playSongMethod(mFilteredSongsList, mCategoryName, mCategoryViewModelClass);
+                createNotification.playSongMethod(mFilteredSongsList, mCategoryName, mCategoryViewModelClass, true);
 
             }
 
@@ -128,10 +133,32 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
         }
     };
 
+    private class PlayerEventListener implements Player.EventListener {
+
+        @Override
+        public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+            if (playbackState == Player.STATE_ENDED) {
+
+                createNotification.player1.next();
+                nextSongMethod();
+            }
+
+        }
+
+    }
+
+    @Override
+    public void onPositionDiscontinuity(@Player.DiscontinuityReason int reason) {
+        if (createNotification.player1.getPlaybackError() != null) {
+            // The user has performed a seek whilst in the error state. Update the resume position so
+            // that if the user then retries, playback resumes from the position to which they seeked.
+        }
+    }
+
+
     public SingleSongHelperClass(Activity mContext, ViewGroup viewGroup, CategoryViewModelClass mCategoryViewModelClass,
                                  String mCategoryName, List<CategoryViewModelClass> mCategoryViewHelperClasses, int value,
-                                 NotificationInterface notificationInterface, int mBackButton,List<CategoryViewModelClass> filteredSongsList
-    ) {
+                                 NotificationInterface notificationInterface, int mBackButton, List<CategoryViewModelClass> filteredSongsList,String mSubCategoryName) {
 
         mRootView = LayoutInflater.from(mContext).inflate(R.layout.activity_single_song, viewGroup);
         this.mCategoryViewModelClass = mCategoryViewModelClass;
@@ -146,11 +173,13 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
         this.value = value;
         this.mBackButton = mBackButton;
 
-        firebaseDatabaseClass = new FirebaseDatabaseClass();
+        firebaseDatabaseClass = new FirebaseDatabaseClass(mContext);
 
         playSongSharedPreference = new PlaySongSharedPreference(mContext);
 
         this.mFilteredSongsList = filteredSongsList;
+
+        this.mSubCategoryName = mSubCategoryName;
 
 //        this.mSecondCategoryViewHelperClass.add(mCategoryViewModelClass);
 //        this.mSecondCategoryViewHelperClass.addAll(mCategoryViewHelperClasses);
@@ -220,7 +249,7 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
                 playListIntent.putExtra("category_name", mCategoryName);
                 playListIntent.putExtra("song_details", new Gson().toJson(mCategoryViewHelperClasses.get(0)));
                 playListIntent.putExtra("all_songs", new Gson().toJson(mCategoryViewHelperClasses));
-                playListIntent.putExtra("filtered_songs",new Gson().toJson(mFilteredSongsList));
+                playListIntent.putExtra("filtered_songs", new Gson().toJson(mFilteredSongsList));
                 playListIntent.putExtra("back_button", mBackButton);
                 mContext.startActivity(playListIntent);
                 mContext.overridePendingTransition(0, 0);
@@ -235,16 +264,14 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
                 createNotification.player1.previous();
 
-                int vlaue = mCategoryViewHelperClasses.indexOf(createNotification.modelClass);
+                int value = mCategoryViewHelperClasses.indexOf(createNotification.modelClass);
 
-                if (vlaue == 0) {
+                if (value == 0) {
 
                     return;
                 }
 
-                saveSongCount(createNotification.modelClass.getSong_id());
-                setSongDetails(createNotification.modelClass.getTitle(), createNotification.modelClass.getDescription(), createNotification.modelClass.getImg_url());
-
+                nextSongMethod();
             }
 
         });
@@ -314,13 +341,12 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
     }
 
-    private void nextSongMethod() {
+    public void nextSongMethod() {
 
-//        if (createNotification.modelClass.getPaid_content().equalsIgnoreCase("1")) {
-//
-//            createNotification.player1.next();
-//
-//        }
+        playSongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(createNotification.modelClass));
+
+        mCategoryViewModelClass = createNotification.modelClass;
+
 
         saveSongCount(createNotification.modelClass.getSong_id());
         setSongDetails(createNotification.modelClass.getTitle(), createNotification.modelClass.getDescription(), createNotification.modelClass.getImg_url());
@@ -337,9 +363,12 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
 
             mCategoryViewModelClass = createNotification.modelClass;
 
+            playSongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(createNotification.modelClass));
+
+
         } catch (Exception e) {
 
-            Log.d("Error", e.getLocalizedMessage());
+            Log.d("Error_Value", e.getLocalizedMessage());
 
         }
 
@@ -386,8 +415,9 @@ public class SingleSongHelperClass implements LoginInterface, Player.EventListen
         intent.putExtra("song_details", new Gson().toJson(mCategoryViewModelClass));
         intent.putExtra("all_songs", new Gson().toJson(mCategoryViewHelperClasses));
         intent.putExtra("back_button", mBackButton);
+        intent.putExtra("sub_category_name", mSubCategoryName);
         mContext.startActivity(intent);
-        mContext.finish();
+        //mContext.finish();
 
     }
 

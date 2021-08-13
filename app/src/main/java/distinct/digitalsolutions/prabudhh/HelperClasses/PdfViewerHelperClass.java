@@ -64,6 +64,8 @@ public class PdfViewerHelperClass implements LoginInterface {
 
     private int mPdfPlayValue;
 
+
+
     public PdfViewerHelperClass(Activity activity, ViewGroup viewGroup, CategoryViewModelClass
             categoryViewModelClass, String CategoryName, NotificationInterface notificationInterface, String categoryId, int mValue,
                                 int mBackButton, List<CategoryViewModelClass> mAllSongList) {

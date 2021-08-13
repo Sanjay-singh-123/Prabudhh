@@ -5,9 +5,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
+import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -41,7 +47,7 @@ import distinct.digitalsolutions.prabudhh.Model.CategoryViewModelClass;
 import distinct.digitalsolutions.prabudhh.R;
 import distinct.digitalsolutions.prabudhh.SharedPreference.PlaySongSharedPreference;
 
-public class SubCategoryActivity extends AppCompatActivity implements PaymentAlertInterface, NotificationInterface{
+public class SubCategoryActivity extends AppCompatActivity implements PaymentAlertInterface, NotificationInterface {
 
     private ImageView mSubCategoryBackButton;
     private TextView mSubCategoryName;
@@ -49,24 +55,50 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
     private RecyclerView mSubCategoryViewRecyclerview;
     private SubCategoryViewRecyclerViewAdapter mSubSubCategoryViewRecyclerViewAdapter;
     private List<CategoryViewModelClass> mSubCategoryViewModelClass = new ArrayList<>();
-    private String subCategoryName,categoryName;
+    private String subCategoryName, categoryName;
 
     private FirebaseDatabaseClass mSubCategoryFirebaseDatabaseClass;
 
     private EditText mSubSearchSongHomeEditText;
     private RelativeLayout mSubSearchSongHomeLayout;
-   // private PaymentAlertInterface paymentAlertInterface;
+    // private PaymentAlertInterface paymentAlertInterface;
 
     private RelativeLayout mSubProgressBarLayout;
     private ProgressBarClass subProgressBarClass;
 
     public AudioPlayerBroadcastReceiver myReceiver;
-   // private NotificationInterface notificationInterface;
+    // private NotificationInterface notificationInterface;
     private PlaySongSharedPreference playSongSharedPreference;
 
     private TextView mSubViewSongSongName, mSubViewSongSongArtist;
     private ImageView mSubViewSongImage;
     private RelativeLayout mSubPlayListLayout;
+
+    private Handler mSetDetailsHandler = new Handler();
+
+    private CreateNotification createNotification;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            try {
+
+                CreateNotification.MusicBinder mServiceBinder = (CreateNotification.MusicBinder) service;
+                createNotification = mServiceBinder.getService();
+
+            } catch (Exception e) {
+                Log.d("Error_Value", e.getLocalizedMessage());
+            }
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            System.exit(0);
+        }
+
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +108,7 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
         subCategoryName = getIntent().getStringExtra("category_name");
         categoryName = getIntent().getStringExtra("category");
 
-        mSubCategoryFirebaseDatabaseClass = new FirebaseDatabaseClass();
+        mSubCategoryFirebaseDatabaseClass = new FirebaseDatabaseClass(SubCategoryActivity.this);
 
         subProgressBarClass = new ProgressBarClass(SubCategoryActivity.this);
 
@@ -155,7 +187,7 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
     public void backMethod() {
 
         Intent backIntent = new Intent(SubCategoryActivity.this, CategoryViewActivity.class);
-        backIntent.putExtra("category_name",categoryName);
+        backIntent.putExtra("category_name", categoryName);
         backIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(backIntent);
 
@@ -219,15 +251,15 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
 
         mSubCategoryViewModelClass = categoryViewModelClasses;
 
-        mSubSubCategoryViewRecyclerViewAdapter = new SubCategoryViewRecyclerViewAdapter(
-                subCategoryName, SubCategoryActivity.this, mSubCategoryViewModelClass, this);
+        mSubSubCategoryViewRecyclerViewAdapter = new SubCategoryViewRecyclerViewAdapter(subCategoryName,
+                SubCategoryActivity.this, mSubCategoryViewModelClass, this, categoryName);
         mSubCategoryViewRecyclerview.setAdapter(mSubSubCategoryViewRecyclerViewAdapter);
         mSubSubCategoryViewRecyclerViewAdapter.notifyDataSetChanged();
 
     }
 
 
-    public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName,List<CategoryViewModelClass> categoryViewHelperClasses
+    public void showAlertDialog(CategoryViewModelClass categoryViewModelClass, String categoryName, List<CategoryViewModelClass> categoryViewHelperClasses
                                 //, String mCategoryid
     ) {
 
@@ -277,7 +309,7 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
                 Intent playListIntent = new Intent(SubCategoryActivity.this, PlayListSongActivity.class);
                 playListIntent.putExtra("song_details", new Gson().toJson(categoryViewModelClass));
                 playListIntent.putExtra("category_name", categoryName);
-                playListIntent.putExtra("all_songs",new Gson().toJson(categoryViewHelperClasses));
+                playListIntent.putExtra("all_songs", new Gson().toJson(categoryViewHelperClasses));
                 //playListIntent.putExtra("category_id", mCategoryid);
                 startActivity(playListIntent);
 
@@ -308,30 +340,36 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
         });
     }
 
-    public void playMethod(){
+    @Override
+    public void onBackPressed() {
 
-        playSongSharedPreference.isSongPlaying("is_song_playing",true);
+        backMethod();
+    }
+
+    public void playMethod() {
+
+        playSongSharedPreference.isSongPlaying("is_song_playing", true);
         setTheam();
 
     }
 
-    public void pauseMethod(){
+    public void pauseMethod() {
 
         mSubPlayListLayout.setVisibility(View.GONE);
-        playSongSharedPreference.isSongPlaying("is_song_playing",false);
+        playSongSharedPreference.isSongPlaying("is_song_playing", false);
 
     }
 
     private void setTheam() {
 
-        if (playSongSharedPreference.getIsSongPlaying("is_song_playing")){
+        if (playSongSharedPreference.getIsSongPlaying("is_song_playing")) {
 
             try {
 
                 mSubPlayListLayout.setVisibility(View.VISIBLE);
 
                 String songDetails = playSongSharedPreference.getPlayingSongDetails("playing_song_details");
-                CategoryViewModelClass categoryViewModelClass = new Gson().fromJson(songDetails,CategoryViewModelClass.class);
+                CategoryViewModelClass categoryViewModelClass = new Gson().fromJson(songDetails, CategoryViewModelClass.class);
 
                 mSubViewSongSongName.setText(categoryViewModelClass.getTitle());
                 mSubViewSongSongArtist.setText(categoryViewModelClass.getDescription());
@@ -353,9 +391,72 @@ public class SubCategoryActivity extends AppCompatActivity implements PaymentAle
 
     }
 
+    public void nextMethod(){
+
+        mSetDetailsHandler.postDelayed(() -> {
+
+            setDataMethod();
+
+        }, 1000);
+
+
+    }
+
+    public void previousMethod(){
+
+        mSetDetailsHandler.postDelayed(() -> {
+
+            setDataMethod();
+
+        }, 1000);
+
+
+    }
+
+    private void setDataMethod() {
+
+        if (createNotification == null) {
+
+            Intent playService = new Intent(SubCategoryActivity.this, CreateNotification.class);
+            Util.startForegroundService(SubCategoryActivity.this, playService);
+
+            bindService(playService, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        } else {
+
+            playSongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(createNotification.modelClass));
+
+            mSubCategoryName.setText(createNotification.modelClass.getTitle());
+            mSubViewSongSongArtist.setText(createNotification.modelClass.getDescription());
+
+            if (!createNotification.modelClass.getImg_url().equalsIgnoreCase("")) {
+
+                Picasso.get().load(createNotification.modelClass.getImg_url()).into(mSubViewSongImage);
+
+            }
+        }
+    }
+
 
     @Override
-    public void notificationEvents(int play, int pause) {
+    public void notificationEvents(int play, int pause, int next, int previous) {
+
+        if (play == 1) {
+
+            playMethod();
+
+        } else if (pause == 1) {
+
+            pauseMethod();
+
+        } else if (next == 1) {
+
+            nextMethod();
+
+        } else if (previous == 1) {
+
+            previousMethod();
+        }
 
     }
 

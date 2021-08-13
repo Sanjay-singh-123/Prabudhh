@@ -27,18 +27,18 @@ public class SubCategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<Sub
 
     public List<CategoryViewModelClass> mCategoryModelClass;
     public Activity mCategoryViewActivity;
-    public String categoryName;
+    public String mSubCategoryName;
     private UserSharedPreferences mUserSharedPreference;
     private PaymentAlertInterface paymentAlertInterface;
+    private String mCategoryName;
 
-    public SubCategoryViewRecyclerViewAdapter(
-            //String categoryId,
-            String categoryname, Activity mCategoryViewActivity,
-            List<CategoryViewModelClass> mCategoryModelClass, PaymentAlertInterface paymentAlertInterface) {
+    public SubCategoryViewRecyclerViewAdapter(String mSubCategoryName, Activity mCategoryViewActivity, List<CategoryViewModelClass> mCategoryModelClass,
+                                              PaymentAlertInterface paymentAlertInterface,String mCategoryName) {
 
         this.mCategoryModelClass = mCategoryModelClass;
         this.mCategoryViewActivity = mCategoryViewActivity;
-        this.categoryName = categoryname;
+        this.mSubCategoryName = mSubCategoryName;
+        this.mCategoryName = mCategoryName;
         //this.categoryId = categoryId;
 
         this.paymentAlertInterface = paymentAlertInterface;
@@ -69,7 +69,7 @@ public class SubCategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<Sub
 
         View customerHistoryViewAdapter;
 
-        if (categoryName.equalsIgnoreCase("Recommended Play List") || categoryName.equalsIgnoreCase("Mostly Played")) {
+        if (mSubCategoryName.equalsIgnoreCase("Recommended Play List") || mSubCategoryName.equalsIgnoreCase("Mostly Played")) {
 
             customerHistoryViewAdapter = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_recommended_layout, parent, false);
 
@@ -101,18 +101,17 @@ public class SubCategoryViewRecyclerViewAdapter extends RecyclerView.Adapter<Sub
 
             if (categoryViewModelClass.getPaid_content().equalsIgnoreCase("1")) {
 
-                paymentAlertInterface.showAlertDialog(categoryViewModelClass, categoryName, mCategoryModelClass
-                        //        categoryId,
-                );
+                paymentAlertInterface.showAlertDialog(categoryViewModelClass, mSubCategoryName, mCategoryModelClass);
 
             } else {
 
 
                 Intent playListIntent = new Intent(mCategoryViewActivity, PlayListSongActivity.class);
                 playListIntent.putExtra("song_details", new Gson().toJson(categoryViewModelClass));
-                playListIntent.putExtra("category_name", categoryName);
+                playListIntent.putExtra("sub_category_name", mSubCategoryName);
+                playListIntent.putExtra("category_name",mCategoryName);
 
-                if (categoryName.equalsIgnoreCase("Mostly Played") || categoryName.equalsIgnoreCase("Recommended Play List")) {
+                if (mSubCategoryName.equalsIgnoreCase("Mostly Played") || mSubCategoryName.equalsIgnoreCase("Recommended Play List")) {
 
                     playListIntent.putExtra("back_button", 1);
                 }

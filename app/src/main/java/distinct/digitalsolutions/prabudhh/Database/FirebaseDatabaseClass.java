@@ -1,6 +1,7 @@
 package distinct.digitalsolutions.prabudhh.Database;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -35,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import distinct.digitalsolutions.prabudhh.Activities.MainActivity;
 import distinct.digitalsolutions.prabudhh.HelperClasses.PlayListHelperClass;
 import distinct.digitalsolutions.prabudhh.Interfaces.CategoryFirebaseInterface;
 import distinct.digitalsolutions.prabudhh.Interfaces.DatabaseInterface;
@@ -57,14 +59,16 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
     private DatabaseReference mFirebaseDatabase;
     private StorageReference mFirebaseStorageReference;
     private String mUserId;
+    private Context context;
 
-    public FirebaseDatabaseClass() {
+    public FirebaseDatabaseClass(Context context) {
 
         mUserAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
         mFirebaseStorageReference = FirebaseStorage.getInstance().getReference();
 
         mUserId = mUserAuth.getCurrentUser().getUid();
+        this.context = context;
 
 
     }
@@ -87,43 +91,56 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
         List<HomeModelClass> homeModelClasses = new ArrayList<>();
 
-        mFirebaseDatabase.child("category").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    HomeModelClass homeModelClass = dataSnapshot.getValue(HomeModelClass.class);
+            mFirebaseDatabase.child("category").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    if (TextUtils.isEmpty(searchValue) || searchValue.equalsIgnoreCase("")) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                        homeModelClasses.add(homeModelClass);
+                        HomeModelClass homeModelClass = dataSnapshot.getValue(HomeModelClass.class);
 
-                    } else {
+                        if (TextUtils.isEmpty(searchValue) || searchValue.equalsIgnoreCase("")) {
 
-                        if (homeModelClass != null) {
+                            homeModelClasses.add(homeModelClass);
 
-                            if (homeModelClass.getCategory_name().toLowerCase().contains(searchValue)) {
+                        } else {
 
-                                homeModelClasses.add(homeModelClass);
+                            if (homeModelClass != null) {
 
+                                if (homeModelClass.getCategory_name().toLowerCase().contains(searchValue)) {
+
+                                    homeModelClasses.add(homeModelClass);
+
+                                }
                             }
                         }
+
                     }
+
+                    firebaseDatabaseInterface.onSuccess(homeModelClasses);
 
                 }
 
-                firebaseDatabaseInterface.onSuccess(homeModelClasses);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    firebaseDatabaseInterface.onFailure(error.getMessage());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-                firebaseDatabaseInterface.onFailure(error.getMessage());
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
 
-            }
-        });
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
+
 
     }
 
@@ -131,47 +148,60 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
         List<HomeModelClass> subCategoryList = new ArrayList<>();
 
-        mFirebaseDatabase.child("sub_categorys").child(categoryName).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    String subCategoryId = dataSnapshot.child("sub_category_id").getValue().toString();
-                    String subCategoryName = dataSnapshot.child("sub_category_name").getValue().toString();
-                    String thumbNail = dataSnapshot.child("thumbnail").getValue().toString();
+            mFirebaseDatabase.child("sub_categorys").child(categoryName).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    HomeModelClass homeModelClass = new HomeModelClass(subCategoryId, subCategoryName, thumbNail);
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    if (TextUtils.isEmpty(searchSubCategory) || searchSubCategory.equalsIgnoreCase("")) {
+                        String subCategoryId = dataSnapshot.child("sub_category_id").getValue().toString();
+                        String subCategoryName = dataSnapshot.child("sub_category_name").getValue().toString();
+                        String thumbNail = dataSnapshot.child("thumbnail").getValue().toString();
 
-                        subCategoryList.add(homeModelClass);
+                        HomeModelClass homeModelClass = new HomeModelClass(subCategoryId, subCategoryName, thumbNail);
 
-                    } else {
+                        if (TextUtils.isEmpty(searchSubCategory) || searchSubCategory.equalsIgnoreCase("")) {
 
-                        if (subCategoryName != null) {
+                            subCategoryList.add(homeModelClass);
 
-                            if (subCategoryName.toLowerCase().contains(searchSubCategory)) {
+                        } else {
 
-                                subCategoryList.add(homeModelClass);
+                            if (subCategoryName != null) {
 
+                                if (subCategoryName.toLowerCase().contains(searchSubCategory)) {
+
+                                    subCategoryList.add(homeModelClass);
+
+                                }
                             }
                         }
+
                     }
+
+                    firebaseDatabaseInterface.onSuccess(subCategoryList);
 
                 }
 
-                firebaseDatabaseInterface.onSuccess(subCategoryList);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    firebaseDatabaseInterface.onFailure("Failed To get Data");
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-                firebaseDatabaseInterface.onFailure("Failed To get Data");
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
 
-            }
-        });
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
+
 
     }
 
@@ -180,43 +210,55 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
         List<CategoryViewModelClass> categoryViewModelClasses = new ArrayList<>();
         List<CategoryViewModelClass> allSongsList = new ArrayList<>();
 
-        mFirebaseDatabase.child("Music").child(subCategoryName).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+            mFirebaseDatabase.child("Music").child(subCategoryName).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    CategoryViewModelClass categoryViewModelClass = dataSnapshot.getValue(CategoryViewModelClass.class);
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    if (TextUtils.isEmpty(searchSong) || searchSong.equalsIgnoreCase("")) {
+                        CategoryViewModelClass categoryViewModelClass = dataSnapshot.getValue(CategoryViewModelClass.class);
 
-                        categoryViewModelClasses.add(categoryViewModelClass);
+                        if (TextUtils.isEmpty(searchSong) || searchSong.equalsIgnoreCase("")) {
 
-                    } else {
+                            categoryViewModelClasses.add(categoryViewModelClass);
 
-                        if (categoryViewModelClass != null) {
+                        } else {
 
-                            if (categoryViewModelClass.getTitle().toLowerCase().contains(searchSong)) {
+                            if (categoryViewModelClass != null) {
 
-                                categoryViewModelClasses.add(categoryViewModelClass);
+                                if (categoryViewModelClass.getTitle().toLowerCase().contains(searchSong)) {
 
+                                    categoryViewModelClasses.add(categoryViewModelClass);
+
+                                }
                             }
                         }
+
                     }
+
+                    categoryFirebaseInterface.onSuccess(categoryViewModelClasses, allSongsList);
 
                 }
 
-                categoryFirebaseInterface.onSuccess(categoryViewModelClasses, allSongsList);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    categoryFirebaseInterface.onFailure(error.getMessage());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-                categoryFirebaseInterface.onFailure(error.getMessage());
+        } catch (Exception e) {
 
-            }
-        });
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
 
     }
 
@@ -228,31 +270,42 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
     public void postSongMethod(String song, String userId, SongPostFirebaseInterface songPostFirebaseInterface) {
 
-        String postId = mFirebaseDatabase.push().getKey();
+        try {
 
-        Map<String, String> hashMap = new HashMap<>();
-        hashMap.put("Song", song);
-        hashMap.put("User", userId);
+            String postId = mFirebaseDatabase.push().getKey();
 
-        if (postId == null) {
+            Map<String, String> hashMap = new HashMap<>();
+            hashMap.put("Song", song);
+            hashMap.put("User", userId);
 
-            songPostFirebaseInterface.onFailure("Failed");
-            return;
-        }
-
-        mFirebaseDatabase.child("SongPosts").child(postId).setValue(hashMap).addOnCompleteListener(task -> {
-
-            if (task.isSuccessful()) {
-
-                songPostFirebaseInterface.onSuccess("Success", "", "");
-
-            } else {
+            if (postId == null) {
 
                 songPostFirebaseInterface.onFailure("Failed");
-
+                return;
             }
 
-        });
+            mFirebaseDatabase.child("SongPosts").child(postId).setValue(hashMap).addOnCompleteListener(task -> {
+
+                if (task.isSuccessful()) {
+
+                    songPostFirebaseInterface.onSuccess("Success", "", "");
+
+                } else {
+
+                    songPostFirebaseInterface.onFailure("Failed");
+
+                }
+
+            });
+
+        } catch (Exception e) {
+
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+        }
 
     }
 
@@ -292,14 +345,15 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
                                 }
 
-                                try{
+                                try {
 
-                                   String  userName = snapshot.child("user_name").getValue().toString();
+                                    String userName = snapshot.child("user_name").getValue().toString();
 
                                     WhichAreModelClass whichAreModelClass1 = new WhichAreModelClass(post, userName, thumbNail, image);
                                     whichAreModelClass.add(whichAreModelClass1);
 
-                                }catch (Exception e){}
+                                } catch (Exception e) {
+                                }
 
 
                                 if (finalValue >= Integer.parseInt(total)) {
@@ -328,6 +382,11 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
             });
 
         } catch (Exception e) {
+
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
         }
 
 
@@ -409,34 +468,50 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
         } catch (IOException e) {
             e.printStackTrace();
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
         }
     }
 
     public void getUserDetails(UserDatailsFetchingInterface userDatailsFetchingInterface) {
 
-        mFirebaseDatabase.child("User_Details").child(mUserId).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                try {
+            mFirebaseDatabase.child("User_Details").child(mUserId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    UserDeatilsModelClass userDeatilsModelClass = snapshot.getValue(UserDeatilsModelClass.class);
+                    try {
 
-                    userDatailsFetchingInterface.onSuccess(userDeatilsModelClass);
+                        UserDeatilsModelClass userDeatilsModelClass = snapshot.getValue(UserDeatilsModelClass.class);
 
-                } catch (Exception e) {
+                        userDatailsFetchingInterface.onSuccess(userDeatilsModelClass);
 
-                    userDatailsFetchingInterface.onFailure(e.getLocalizedMessage());
+                    } catch (Exception e) {
+
+                        userDatailsFetchingInterface.onFailure(e.getLocalizedMessage());
+                    }
+
+
                 }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                }
+            });
+        } catch (Exception e) {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            Log.d("Erro_value", e.getLocalizedMessage());
 
-            }
-        });
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+        }
+
     }
 
     public void getSongAndUpdateCount(String song_id, UserUploadDataInterface userUploadDataInterface) {
@@ -526,113 +601,151 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
         } catch (Exception e) {
 
             userUploadDataInterface.onSuccess(false);
+
         }
     }
 
     public void getPaymentPrices(PaymentInterface paymentInterface) {
 
-        mFirebaseDatabase.child("PaymentPlans").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                String monthlyPayment = snapshot.child("monthly").getValue().toString();
-                String yearlyPayment = snapshot.child("yearly").getValue().toString();
+            mFirebaseDatabase.child("PaymentPlans").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                paymentInterface.payment(monthlyPayment, yearlyPayment);
+                    String monthlyPayment = snapshot.child("monthly").getValue().toString();
+                    String yearlyPayment = snapshot.child("yearly").getValue().toString();
 
-            }
+                    paymentInterface.payment(monthlyPayment, yearlyPayment);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
 
-                paymentInterface.dataNotFound(error.getMessage());
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                    paymentInterface.dataNotFound(error.getMessage());
+
+                }
+            });
+
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+        }
+
 
     }
 
     public void checkUserPaymentStatus(SongPostFirebaseInterface songPostFirebaseInterface) {
 
-        mFirebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                if (snapshot.hasChild("Payment_Status")) {
+            mFirebaseDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    mFirebaseDatabase.child("Payment_Status").addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.hasChild("Payment_Status")) {
 
-                            if (snapshot.hasChild(mUserId)) {
+                        mFirebaseDatabase.child("Payment_Status").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                if (snapshot.hasChild(mUserId)) {
 
-                                    String key = dataSnapshot.getKey();
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                                    if (key != null && key.equalsIgnoreCase(mUserId)) {
+                                        String key = dataSnapshot.getKey();
 
-                                        String currentDate = dataSnapshot.child("date").getValue().toString();
-                                        String expiryDate = dataSnapshot.child("expiry_date").getValue().toString();
+                                        if (key != null && key.equalsIgnoreCase(mUserId)) {
 
-                                        songPostFirebaseInterface.onSuccess("Success", currentDate, expiryDate);
+                                            String currentDate = dataSnapshot.child("date").getValue().toString();
+                                            String expiryDate = dataSnapshot.child("expiry_date").getValue().toString();
+
+                                            songPostFirebaseInterface.onSuccess("Success", currentDate, expiryDate);
+
+
+                                        }
 
 
                                     }
 
+                                } else {
+
+                                    songPostFirebaseInterface.onFailure("Failed");
 
                                 }
 
-                            } else {
-
-                                songPostFirebaseInterface.onFailure("Failed");
-
                             }
 
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                            songPostFirebaseInterface.onFailure("Failed");
-                        }
-                    });
+                                songPostFirebaseInterface.onFailure("Failed");
+                            }
+                        });
 
 
-                } else {
+                    } else {
+
+                        songPostFirebaseInterface.onFailure("Failed");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
                     songPostFirebaseInterface.onFailure("Failed");
                 }
-            }
+            });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
 
-                songPostFirebaseInterface.onFailure("Failed");
-            }
-        });
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
+
 
     }
 
     public void savePaymentDetails(String date, String expiryDate, String planType, SongPostFirebaseInterface songPostFirebaseInterface) {
 
-        Map<String, String> paymentHashMap = new HashMap<>();
-        paymentHashMap.put("date", date);
-        paymentHashMap.put("expiry_date", expiryDate);
-        paymentHashMap.put("plan_type", planType);
+        try {
 
-        mFirebaseDatabase.child("Payment_Status").child(mUserId).setValue(paymentHashMap).addOnCompleteListener(task -> {
 
-            if (task.isSuccessful()) {
+            Map<String, String> paymentHashMap = new HashMap<>();
+            paymentHashMap.put("date", date);
+            paymentHashMap.put("expiry_date", expiryDate);
+            paymentHashMap.put("plan_type", planType);
 
-                songPostFirebaseInterface.onSuccess("Success", "", "");
+            mFirebaseDatabase.child("Payment_Status").child(mUserId).setValue(paymentHashMap).addOnCompleteListener(task -> {
 
-            } else {
+                if (task.isSuccessful()) {
 
-                songPostFirebaseInterface.onFailure("Failed");
-            }
+                    songPostFirebaseInterface.onSuccess("Success", "", "");
 
-        });
+                } else {
+
+                    songPostFirebaseInterface.onFailure("Failed");
+                }
+
+            });
+
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
+
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
+
 
     }
 
@@ -640,30 +753,42 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
 
         ArrayList<MostlyPlayed> mostlyPlayed = new ArrayList<>();
 
-        mFirebaseDatabase.child("SongsCount").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
 
-                    String key = snapshot1.getKey();
-                    String count = snapshot1.child("count").getValue().toString();
+            mFirebaseDatabase.child("SongsCount").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    mostlyPlayed.add(new MostlyPlayed(key, count));
+                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+
+                        String key = snapshot1.getKey();
+                        String count = snapshot1.child("count").getValue().toString();
+
+                        mostlyPlayed.add(new MostlyPlayed(key, count));
+
+                    }
+
+                    mostPlayedSongInterface.onSuccess(mostlyPlayed);
 
                 }
 
-                mostPlayedSongInterface.onSuccess(mostlyPlayed);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    mostPlayedSongInterface.onFailure(error.getDetails());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
 
-                mostPlayedSongInterface.onFailure(error.getDetails());
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
 
-            }
-        });
+
+        }
+
 
     }
 
@@ -672,40 +797,54 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
         List<CategoryViewModelClass> categoryViewModelClasses = new ArrayList<>();
         List<CategoryViewModelClass> allSongs = new ArrayList<>();
 
-        mFirebaseDatabase.child("Music").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+            mFirebaseDatabase.child("Music").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        CategoryViewModelClass categoryViewModelClass = dataSnapshot1.getValue(CategoryViewModelClass.class);
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                        for (MostlyPlayed mostlyPlayed : mostlyPlayeds) {
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                            if (mostlyPlayed.getSongId().equalsIgnoreCase(categoryViewModelClass.getSong_id())) {
+                            CategoryViewModelClass categoryViewModelClass = dataSnapshot1.getValue(CategoryViewModelClass.class);
 
-                                categoryViewModelClasses.add(categoryViewModelClass);
+                            allSongs.add(categoryViewModelClass);
 
+                            for (MostlyPlayed mostlyPlayed : mostlyPlayeds) {
+
+                                if (mostlyPlayed.getSongId().equalsIgnoreCase(categoryViewModelClass.getSong_id())) {
+
+                                    categoryViewModelClasses.add(categoryViewModelClass);
+
+                                }
                             }
+
                         }
 
                     }
 
+                    categoryFirebaseInterface.onSuccess(categoryViewModelClasses, allSongs);
+
                 }
 
-                categoryFirebaseInterface.onSuccess(categoryViewModelClasses, allSongs);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    categoryFirebaseInterface.onFailure(error.getMessage());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-                categoryFirebaseInterface.onFailure(error.getMessage());
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
 
-            }
-        });
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
 
 
     }
@@ -715,42 +854,54 @@ public class FirebaseDatabaseClass implements DatabaseInterface {
         List<CategoryViewModelClass> playListHelperClasses = new ArrayList<>();
         List<CategoryViewModelClass> allSongsListClass = new ArrayList<>();
 
-        mFirebaseDatabase.child("Music").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+            mFirebaseDatabase.child("Music").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Log.d("Recommended", dataSnapshot1.getKey());
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                        CategoryViewModelClass playListHelperClass = dataSnapshot1.getValue(CategoryViewModelClass.class);
+                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
-                        if (playListHelperClass != null) {
+                            Log.d("Recommended", dataSnapshot1.getKey());
 
-                            if (playListHelperClass.getRecommended().equalsIgnoreCase("1")) {
+                            CategoryViewModelClass playListHelperClass = dataSnapshot1.getValue(CategoryViewModelClass.class);
 
-                                playListHelperClasses.add(playListHelperClass);
+                            if (playListHelperClass != null) {
+
+                                if (playListHelperClass.getRecommended().equalsIgnoreCase("1")) {
+
+                                    playListHelperClasses.add(playListHelperClass);
+
+                                }
 
                             }
 
                         }
-
                     }
+
+                    categoryFirebaseInterface.onSuccess(playListHelperClasses, allSongsListClass);
+
                 }
 
-                categoryFirebaseInterface.onSuccess(playListHelperClasses, allSongsListClass);
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    categoryFirebaseInterface.onFailure(error.getMessage());
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
 
-                categoryFirebaseInterface.onFailure(error.getMessage());
+        } catch (Exception e) {
+            Log.d("Erro_value", e.getLocalizedMessage());
 
-            }
-        });
+            Intent intent = new Intent(context, MainActivity.class);
+            context.startActivity(intent);
+
+
+        }
 
     }
 

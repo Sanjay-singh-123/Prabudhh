@@ -23,23 +23,22 @@ public class PlayListRecyclerviewAdapter extends RecyclerView.Adapter<PlayListRe
 
     public List<CategoryViewModelClass> mPlayListModelClass;
     public Activity mPlayListAdapter;
-    private String mPlayListCategoryName;
+    private String mPlayListSubCategoryName;
     private PlayListInterface playListInterface;
     private PaymentAlertInterface paymentAlertInterface;
-    //private String categoryId;
+    private String mCategoryName;
 
     public PlayListRecyclerviewAdapter(Activity mPlayListAdapter, List<CategoryViewModelClass> mPlayListModelClass,
-                                       String mPlayListCategoryName, PlayListInterface playListInterface,
-                                       PaymentAlertInterface paymentAlertInterface
-                                       //,String categoryId
-    ) {
+                                       String mPlayListSubCategoryName, PlayListInterface playListInterface,
+                                       PaymentAlertInterface paymentAlertInterface,
+                                       String mCategoryName) {
 
         this.mPlayListModelClass = mPlayListModelClass;
         this.mPlayListAdapter = mPlayListAdapter;
-        this.mPlayListCategoryName = mPlayListCategoryName;
+        this.mPlayListSubCategoryName = mPlayListSubCategoryName;
         this.playListInterface = playListInterface;
         this.paymentAlertInterface = paymentAlertInterface;
-        // this.categoryId = categoryId;
+         this.mCategoryName = mCategoryName;
 
     }
 
@@ -92,13 +91,13 @@ public class PlayListRecyclerviewAdapter extends RecyclerView.Adapter<PlayListRe
 
             if (categoryViewModelClass.getPaid_content().equalsIgnoreCase("1")) {
 
-                paymentAlertInterface.showAlertDialog(categoryViewModelClass, mPlayListCategoryName,mPlayListModelClass
+                paymentAlertInterface.showAlertDialog(categoryViewModelClass, mPlayListSubCategoryName,mPlayListModelClass
                         //        , categoryId
                 );
 
             } else {
 
-                playListInterface.playListResponse(categoryViewModelClass, mPlayListCategoryName);
+                playListInterface.playListResponse(categoryViewModelClass, mPlayListSubCategoryName);
 
             }
 

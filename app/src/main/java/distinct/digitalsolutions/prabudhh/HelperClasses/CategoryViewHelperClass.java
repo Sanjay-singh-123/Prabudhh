@@ -2,8 +2,13 @@ package distinct.digitalsolutions.prabudhh.HelperClasses;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.Handler;
+import android.os.IBinder;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -20,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ui.PlayerNotificationManager;
+import com.google.android.exoplayer2.util.Util;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -30,6 +36,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import distinct.digitalsolutions.prabudhh.Activities.CreateNotification;
 import distinct.digitalsolutions.prabudhh.Activities.MainActivity;
 import distinct.digitalsolutions.prabudhh.Activities.PaymentActivity;
 import distinct.digitalsolutions.prabudhh.Activities.PlayListSongActivity;
@@ -79,6 +86,31 @@ public class CategoryViewHelperClass implements LoginInterface {
     private ImageView mViewSongImage;
     private RelativeLayout mPlayListLayout;
 
+    private CreateNotification createNotification;
+    private Handler mSetDetailsHandler = new Handler();
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            try {
+
+                CreateNotification.MusicBinder mServiceBinder = (CreateNotification.MusicBinder) service;
+                createNotification = mServiceBinder.getService();
+
+            } catch (Exception e) {
+                Log.d("Error_Value", e.getLocalizedMessage());
+            }
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            System.exit(0);
+        }
+
+    };
+
     public CategoryViewHelperClass(Activity context, ViewGroup viewGroup, String categoryName,
                                    //String mCategoryid
                                    PaymentAlertInterface paymentAlertInterface,NotificationInterface notificationInterface) {
@@ -90,7 +122,7 @@ public class CategoryViewHelperClass implements LoginInterface {
 
         this.paymentAlertInterface = paymentAlertInterface;
 
-        mCategoryFirebaseDatabaseClass = new FirebaseDatabaseClass();
+        mCategoryFirebaseDatabaseClass = new FirebaseDatabaseClass(mContext);
 
         progressBarClass = new ProgressBarClass(mContext);
 
@@ -346,6 +378,28 @@ public class CategoryViewHelperClass implements LoginInterface {
 
     }
 
+    public void nextMethod(){
+
+        mSetDetailsHandler.postDelayed(() -> {
+
+            setDataMethod();
+
+        }, 1000);
+
+
+    }
+
+    public void previousMethod(){
+
+        mSetDetailsHandler.postDelayed(() -> {
+
+            setDataMethod();
+
+        }, 1000);
+
+
+    }
+
     private void setTheam() {
 
         if (playSongSharedPreference.getIsSongPlaying("is_song_playing")){
@@ -377,4 +431,27 @@ public class CategoryViewHelperClass implements LoginInterface {
 
     }
 
+    private void setDataMethod() {
+
+        if (createNotification == null) {
+
+            Intent playService = new Intent(mContext, CreateNotification.class);
+            Util.startForegroundService(mContext, playService);
+
+            mContext.bindService(playService, serviceConnection, Context.BIND_AUTO_CREATE);
+
+        } else {
+
+            playSongSharedPreference.setPlayingSongDetails("playing_song_details", new Gson().toJson(createNotification.modelClass));
+
+            mViewSongSongName.setText(createNotification.modelClass.getTitle());
+            mViewSongSongArtist.setText(createNotification.modelClass.getDescription());
+
+            if (!createNotification.modelClass.getImg_url().equalsIgnoreCase("")) {
+
+                Picasso.get().load(createNotification.modelClass.getImg_url()).into(mViewSongImage);
+
+            }
+        }
+    }
 }

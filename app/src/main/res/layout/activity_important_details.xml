@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha=".01"
-        android:src="@mipmap/main_app_logo" />
+        android:src="@mipmap/app_logo" />
 
     <RelativeLayout
         android:id="@+id/main_header_layout"
@@ -117,7 +117,7 @@
                     android:layout_marginEnd="12dp"
                     android:fontFamily="@font/lato_black"
                     android:gravity="center_vertical"
-                    android:text="Prabuddha.audiobooks@gmai.com"
+                    android:text="Prabuddha.audiobooks@gmail.com"
                     android:textAlignment="gravity"
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp" />
@@ -148,31 +148,31 @@
                     android:textColor="@color/colorBlack"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="24dp"
-                    android:layout_marginEnd="12dp"
-                    android:fontFamily="@font/lato_regular"
-                    android:gravity="center_vertical"
-                    android:text="Contact Number :"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="12sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:layout_marginTop="24dp"-->
+<!--                    android:layout_marginEnd="12dp"-->
+<!--                    android:fontFamily="@font/lato_regular"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="Contact Number :"-->
+<!--                    android:textAlignment="gravity"-->
+<!--                    android:textColor="@color/colorBlack"-->
+<!--                    android:textSize="12sp" />-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="3dp"
-                    android:layout_marginEnd="12dp"
-                    android:fontFamily="@font/lato_black"
-                    android:gravity="center_vertical"
-                    android:text="+91-8652757982"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/colorBlack"
-                    android:textSize="14sp" />
+<!--                <TextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginStart="12dp"-->
+<!--                    android:layout_marginTop="3dp"-->
+<!--                    android:layout_marginEnd="12dp"-->
+<!--                    android:fontFamily="@font/lato_black"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="+91-8652757982"-->
+<!--                    android:textAlignment="gravity"-->
+<!--                    android:textColor="@color/colorBlack"-->
+<!--                    android:textSize="14sp" />-->
 
             </LinearLayout>
 

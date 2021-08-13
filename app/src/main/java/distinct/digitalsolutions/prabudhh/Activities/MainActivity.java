@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mMainActivityHelperClass = new MainActivityHelperClass(MainActivity.this,this);
 
-        mMainFirebaseDatabase = new FirebaseDatabaseClass();
+        mMainFirebaseDatabase = new FirebaseDatabaseClass(MainActivity.this);
 
         mAddStoryImage = findViewById(R.id.add_post_icon);
 
@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mMainFragmentManager = getSupportFragmentManager();
 
-        mMainBottomNavigationView.setSelectedItemId(R.id.home_screen);
+        mMainBottomNavigationView.setSelectedItemId(R.id.category_screen);
 
         mMainPageDrawerLayout = findViewById(R.id.main_page_drawer_layout);
         NavigationView mMainPageNavigationView = findViewById(R.id.main_side_navigation);
@@ -131,9 +131,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             mMainPageDrawerLayout.closeDrawer(GravityCompat.END);
 
-        } else if (R.id.home_screen != selectedItemId) {
+        } else if (R.id.category_screen != selectedItemId) {
 
-            mMainBottomNavigationView.setSelectedItemId(R.id.home_screen);
+            mMainBottomNavigationView.setSelectedItemId(R.id.category_screen);
 
         } else {
 
@@ -170,12 +170,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             switch (menuItem.getItemId()) {
 
-                case R.id.home_screen:
-
-                    mAddStoryImage.setVisibility(View.GONE);
-                    mMainFragment = new HomeFragment();
-
-                    break;
+//                case R.id.home_screen:
+//
+//                    mAddStoryImage.setVisibility(View.GONE);
+//                    mMainFragment = new HomeFragment();
+//
+//                    break;
 
                 case R.id.category_screen:
 
@@ -270,15 +270,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void notificationEvents(int play, int pause) {
+    public void notificationEvents(int play, int pause,int next,int previous) {
 
         if (play == 1) {
+
             mMainActivityHelperClass.playMethod();
 
         } else if (pause == 1) {
 
           mMainActivityHelperClass.pauseMethod();
 
+        }else if (next == 1){
+
+            mMainActivityHelperClass.nextMethod();
+
+        }else if (previous == 1){
+
+            mMainActivityHelperClass.previousMethod();
         }
 
     }

@@ -43,7 +43,7 @@ public class WhichAreHelperClass implements LoginInterface {
 
         this.mContext = context;
 
-        mWhichAreFirebaseDatabase = new FirebaseDatabaseClass();
+        mWhichAreFirebaseDatabase = new FirebaseDatabaseClass(mContext);
 
     }
 
