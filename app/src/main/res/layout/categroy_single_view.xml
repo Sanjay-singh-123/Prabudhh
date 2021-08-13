@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="@string/app_name"
-        android:scaleType="fitXY" />
+        android:scaleType="fitXY"
+        android:src="@mipmap/app_logo" />
 
 </androidx.cardview.widget.CardView>
